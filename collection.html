@@ -148,11 +148,13 @@
 <header>
   <div class="nav-logo wordmark">VESTURA</div>
   <nav class="nav-links">
-    <a href="shop.html" class="active">Shop</a>
-    <a href="fit-profile.html">Fit Profile</a>
+    <a href="index.html">Home</a>    
     <a href="about.html">About</a>
+    <a href="fit-profile.html">AI Stylist</a>
+    <a href="collection.html">Collection</a>
+    <a href="contact.html">Contact Us</a>
   </nav>
-  <a href="fit-profile.html" class="nav-cta">Try It On</a>
+  <a href="cart.html" class="nav-cta">Cart</a>
 </header>
 
 <section class="intro">
@@ -199,27 +201,16 @@
 <script>
 /* ---------------- DATA ---------------- */
 const PRODUCTS = [
-  { id:'cloud-cardigan',  name:'Cloud Knit Cardigan',      label:'Knitwear',    price:'₹4,200', img:'images/cloud-cardigan.jpg',   cats:['women','summer'] },
-  { id:'linen-trouser',   name:'Wide-Leg Linen Trouser',   label:'Trousers',    price:'₹3,600', img:'images/linen-trouser.jpg',    cats:['women','summer','new'] },
-  { id:'silk-cami',       name:'Silk-Blend Camisole',      label:'Tops',        price:'₹2,100', img:'images/silk-cami.jpg',        cats:['women','summer'] },
-  { id:'blazer-dress',    name:'Tailored Blazer Dress',    label:'Dresses',     price:'₹5,400', img:'images/blazer-dress.jpg',     cats:['women','new'] },
-  { id:'ribbed-tank',     name:'Ribbed Tank',              label:'Tops',        price:'₹1,450', img:'images/ribbed-tank.jpg',      cats:['women'] },
-  { id:'poplin-sundress', name:'Poplin Sundress',          label:'Dresses',     price:'₹3,300', img:'images/poplin-sundress.jpg',  cats:['women','summer','new'] },
+  { id:'cloud-cardigan',  name:'Cloud Knit Cardigan',      label:'Knitwear',    price:'₹4,200', img:'   assets/images/download1.jpeg',   cats:['women','summer'] },
+  { id:'linen-trouser',   name:'Wide-Leg Linen Trouser',   label:'Trousers',    price:'₹3,600', img:'   assets/images/download2.jpeg' ,    cats:['women','summer','new'] },
+  { id:'silk-cami',       name:'Silk-Blend Camisole',      label:'Tops',        price:'₹2,100', img:'   assets/images/download3.jpeg',        cats:['women','summer'] },
+  { id:'blazer-dress',    name:'Tailored Blazer Dress',    label:'Dresses',     price:'₹5,400', img:'   assets/images/download4.jpeg',     cats:['women','new'] },
+  { id:'ribbed-tank',     name:'Ribbed Tank',              label:'Tops',        price:'₹1,450', img:'   assets/images/download5.jpeg',      cats:['women'] },
+  { id:'poplin-sundress', name:'Poplin Sundress',          label:'Dresses',     price:'₹3,300', img:'assets/images/download6.jpeg',  cats:['women','summer','new'] },
 
-  { id:'rugby',           name:'Collegiate Rugby Shirt',   label:'Outerwear',   price:'₹3,200', img:'images/street-group.jpg',     cats:['men','new'] },
-  { id:'oxford-shirt',    name:'Oxford Weave Shirt',       label:'Shirts',      price:'₹2,950', img:'images/oxford-shirt.jpg',     cats:['men','summer'] },
-  { id:'relaxed-chino',   name:'Relaxed Chino',            label:'Trousers',    price:'₹3,100', img:'images/relaxed-chino.jpg',    cats:['men'] },
-  { id:'crewneck',        name:'Varsity Crewneck',         label:'Fleece',      price:'₹2,850', img:'images/folded-tee.jpg',       cats:['men','new'] },
-  { id:'denim-jacket',    name:'Washed Denim Jacket',      label:'Outerwear',   price:'₹4,800', img:'images/denim-jacket.jpg',     cats:['men'] },
-  { id:'terry-polo',      name:'Terry Polo',               label:'Tops',        price:'₹2,400', img:'images/terry-polo.jpg',       cats:['men','summer'] },
+  { id:'rugby',           name:'Collegiate Rugby Shirt',   label:'Outerwear',   price:'₹3,200', img:'   assets/images/download7.jpeg',     cats:['men','new'] },
+  { id:'oxford-shirt',    name:'Oxford Weave Shirt',       label:'Shirts',      price:'₹2,950', img:'   assets/images/download8.jpeg',     cats:['men','summer'] },
 
-  { id:'utility-overshirt', name:'Utility Overshirt',      label:'Outerwear',   price:'₹3,750', img:'images/utility-overshirt.jpg', cats:['new','men','women'] },
-
-  { id:'cap',              name:'Washed Six-Panel Cap',    label:'Headwear',    price:'₹1,400', img:'images/caps-stack.jpg',       cats:['accessories'] },
-  { id:'tote',             name:'Raw Canvas Tote',         label:'Bags',        price:'₹1,650', img:'images/tote-bags.jpg',        cats:['accessories'] },
-  { id:'leather-belt',     name:'Woven Leather Belt',      label:'Accessories', price:'₹1,950', img:'images/leather-belt.jpg',     cats:['accessories'] },
-  { id:'sunglasses',       name:'Recycled Sunglasses',     label:'Eyewear',     price:'₹2,200', img:'images/sunglasses.jpg',       cats:['accessories','summer'] },
-  { id:'ribbed-beanie',    name:'Ribbed Beanie',           label:'Headwear',    price:'₹1,100', img:'images/ribbed-beanie.jpg',    cats:['accessories'] }
 ];
 
 let activeFilter = 'all';
