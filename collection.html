@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Shop — Vestura</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,500;9..144,600;9..144,700;9..144,900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --olive:#0d2d1e;
+    --olive-2:#153a27;
+    --mint:#e7efda;
+    --off:#f7f6ee;
+    --ink:#0d2d1e;
+    --clay:#a98f56;
+    --sale:#a5462f;
+    --skin:#e3c8a0;
+    --skin-2:#c9a877;
+    --line: rgba(13,45,30,0.14);
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--off);
+    color:var(--ink);
+    font-family:'Inter',sans-serif;
+    overflow-x:hidden;
+    -webkit-font-smoothing:antialiased;
+  }
+  img{display:block;max-width:100%;height:auto;}
+  a{color:inherit;text-decoration:none;}
+  button{font-family:inherit;cursor:pointer;}
+
+  .eyebrow{
+    font-size:11px;letter-spacing:0.2em;text-transform:uppercase;font-weight:700;
+    display:flex;align-items:center;gap:10px;color:var(--olive);
+  }
+  .eyebrow::before{content:'';width:16px;height:1px;background:currentColor;display:inline-block;}
+  .display{font-family:'Fraunces',serif;font-optical-sizing:auto;font-weight:600;letter-spacing:-0.01em;line-height:0.98;}
+  .wordmark{font-family:'Fraunces',serif;font-weight:900;letter-spacing:-0.02em;}
+
+  /* ---------- NAV ---------- */
+  header{
+    position:sticky;top:0;left:0;right:0;z-index:100;
+    background:var(--off);
+    border-bottom:1px solid var(--line);
+    display:flex;align-items:center;justify-content:space-between;
+    padding:20px 5vw;color:var(--olive);
+  }
+  .nav-logo{font-size:22px;}
+  nav.nav-links{display:flex;gap:34px;font-size:13px;letter-spacing:.03em;text-transform:uppercase;font-weight:600;}
+  nav.nav-links a{position:relative;opacity:.82;transition:opacity .2s;}
+  nav.nav-links a:hover, nav.nav-links a.active{opacity:1;}
+  nav.nav-links a.active::after{content:'';position:absolute;left:0;bottom:-6px;height:2px;width:100%;background:var(--clay);}
+  .nav-cta{
+    border:1px solid var(--olive);padding:9px 20px;border-radius:100px;
+    font-size:12px;letter-spacing:.06em;text-transform:uppercase;font-weight:700;
+    transition:background .2s ease,color .2s ease;
+  }
+  .nav-cta:hover{background:var(--olive);color:var(--off);}
+
+  /* ---------- INTRO ---------- */
+  .intro{padding:56px 5vw 8px;}
+  .intro .eyebrow{margin-bottom:18px;}
+  .intro h1{font-size:clamp(28px,4.2vw,48px);max-width:20ch;color:var(--olive);}
+  .intro p{margin-top:14px;font-size:14.5px;max-width:56ch;line-height:1.7;opacity:.72;}
+
+  /* ---------- FILTER BAR ---------- */
+  .filter-bar{
+    position:sticky;top:73px;z-index:40;
+    background:var(--off);border-bottom:1px solid var(--line);
+    padding:18px 5vw;margin-top:40px;
+    display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;
+  }
+  .filter-pills{display:flex;gap:8px;flex-wrap:wrap;}
+  .filter-pill{
+    border:1px solid var(--line);background:var(--off);color:var(--olive);
+    padding:9px 16px;border-radius:100px;font-size:12.5px;font-weight:600;
+    transition:background .18s,color .18s,border-color .18s;
+  }
+  .filter-pill:hover{border-color:var(--olive);}
+  .filter-pill.active{background:var(--olive);color:var(--off);border-color:var(--olive);}
+  .result-count{font-size:12px;opacity:.55;font-weight:600;white-space:nowrap;}
+
+  /* ---------- GRID ---------- */
+  .grid-section{padding:36px 5vw 100px;}
+  .product-grid{
+    display:grid;grid-template-columns:repeat(4,1fr);gap:20px;
+  }
+  .p-card{background:var(--off);border:1px solid var(--line);border-radius:14px;overflow:hidden;transition:box-shadow .2s ease,transform .2s ease;}
+  .p-card:hover{box-shadow:0 14px 26px rgba(13,45,30,0.12);transform:translateY(-3px);}
+  .p-media{position:relative;aspect-ratio:4/5;overflow:hidden;background:var(--mint);}
+  .p-media img{width:100%;height:100%;object-fit:cover;transition:transform .5s ease;}
+  .p-card:hover .p-media img{transform:scale(1.06);}
+  .p-badges{position:absolute;top:10px;left:10px;display:flex;gap:6px;z-index:2;}
+  .p-badge{font-size:9.5px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;padding:5px 9px;border-radius:100px;background:var(--olive);color:var(--off);}
+  .p-badge.summer{background:var(--sale);}
+  .p-badge.new{background:var(--clay);color:var(--olive);}
+  .wishlist-btn{
+    position:absolute;top:10px;right:10px;z-index:3;
+    width:30px;height:30px;border-radius:50%;border:none;background:var(--off);
+    display:flex;align-items:center;justify-content:center;
+    transition:transform .2s ease;
+  }
+  .wishlist-btn:hover{transform:scale(1.08);}
+  .wishlist-btn svg{width:14px;height:14px;color:var(--olive);transition:fill .15s,color .15s;}
+  .wishlist-btn.saved svg{fill:var(--sale);color:var(--sale);}
+  .p-info{padding:13px 14px 15px;}
+  .p-label{font-size:10px;letter-spacing:.06em;text-transform:uppercase;opacity:.5;margin-bottom:3px;}
+  .p-info h3{font-family:'Fraunces',serif;font-weight:600;font-size:14px;color:var(--olive);line-height:1.3;}
+  .p-price{margin-top:6px;font-size:13px;font-weight:700;}
+
+  .empty-state{display:none;text-align:center;padding:80px 20px;}
+  .empty-state.show{display:block;}
+  .empty-state h4{font-family:'Fraunces',serif;font-size:20px;color:var(--olive);margin-bottom:8px;}
+  .empty-state p{font-size:13px;opacity:.6;}
+
+  /* ---------- FOOTER ---------- */
+  footer{background:var(--olive);color:var(--off);padding:60px 5vw 26px;}
+  .foot-top{display:flex;justify-content:space-between;align-items:center;padding-bottom:36px;border-bottom:1px solid rgba(247,246,238,0.18);flex-wrap:wrap;gap:20px;}
+  .foot-top .wordmark{font-size:26px;}
+  .foot-links{display:flex;gap:28px;font-size:13px;text-transform:uppercase;letter-spacing:.04em;font-weight:600;opacity:.85;}
+  .foot-bottom{display:flex;justify-content:space-between;padding-top:20px;font-size:12px;opacity:.55;flex-wrap:wrap;gap:10px;}
+
+  /* ---------- RESPONSIVE ---------- */
+  @media (max-width:1180px){
+    .product-grid{grid-template-columns:repeat(3,1fr);}
+  }
+  @media (max-width:900px){
+    nav.nav-links{display:none;}
+    .filter-bar{top:0;}
+  }
+  @media (max-width:760px){
+    .product-grid{grid-template-columns:repeat(2,1fr);}
+  }
+  @media (max-width:520px){
+    .product-grid{grid-template-columns:1fr 1fr;gap:12px;}
+    .intro{padding:44px 6vw 8px;}
+    .filter-bar{padding:14px 6vw;}
+    .grid-section{padding:28px 6vw 80px;}
+  }
+  @media (prefers-reduced-motion:reduce){*{animation:none !important;transition:none !important;}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="nav-logo wordmark">VESTURA</div>
+  <nav class="nav-links">
+    <a href="shop.html" class="active">Shop</a>
+    <a href="fit-profile.html">Fit Profile</a>
+    <a href="about.html">About</a>
+  </nav>
+  <a href="fit-profile.html" class="nav-cta">Try It On</a>
+</header>
+
+<section class="intro">
+  <div class="eyebrow">Full Collection</div>
+  <h1 class="display">Everything Vestura, sorted the way you shop.</h1>
+  <p>Filter by category below — new arrivals, warm-weather pieces, and the accessories that finish a fit are all one tap away.</p>
+</section>
+
+<div class="filter-bar">
+  <div class="filter-pills" id="filterPills">
+    <button class="filter-pill active" data-filter="all">All</button>
+    <button class="filter-pill" data-filter="women">Women</button>
+    <button class="filter-pill" data-filter="men">Men</button>
+    <button class="filter-pill" data-filter="new">New Arrivals</button>
+    <button class="filter-pill" data-filter="summer">Summer Collection</button>
+    <button class="filter-pill" data-filter="accessories">Accessories</button>
+  </div>
+  <div class="result-count" id="resultCount">18 pieces</div>
+</div>
+
+<section class="grid-section" id="gridSection">
+  <div class="product-grid" id="productGrid"></div>
+  <div class="empty-state" id="emptyState">
+    <h4>Nothing here yet</h4>
+    <p>Try a different category — new pieces land every season.</p>
+  </div>
+</section>
+
+<footer>
+  <div class="foot-top">
+    <div class="wordmark">VESTURA</div>
+    <div class="foot-links">
+      <a href="shop.html">Shop</a>
+      <a href="fit-profile.html">Fit Profile</a>
+      <a href="about.html">About</a>
+    </div>
+  </div>
+  <div class="foot-bottom">
+    <span>© 2024–2026 Vestura. All rights reserved.</span>
+    <span>@vestura · vestura.com</span>
+  </div>
+</footer>
+
+<script>
+/* ---------------- DATA ---------------- */
+const PRODUCTS = [
+  { id:'cloud-cardigan',  name:'Cloud Knit Cardigan',      label:'Knitwear',    price:'₹4,200', img:'images/cloud-cardigan.jpg',   cats:['women','summer'] },
+  { id:'linen-trouser',   name:'Wide-Leg Linen Trouser',   label:'Trousers',    price:'₹3,600', img:'images/linen-trouser.jpg',    cats:['women','summer','new'] },
+  { id:'silk-cami',       name:'Silk-Blend Camisole',      label:'Tops',        price:'₹2,100', img:'images/silk-cami.jpg',        cats:['women','summer'] },
+  { id:'blazer-dress',    name:'Tailored Blazer Dress',    label:'Dresses',     price:'₹5,400', img:'images/blazer-dress.jpg',     cats:['women','new'] },
+  { id:'ribbed-tank',     name:'Ribbed Tank',              label:'Tops',        price:'₹1,450', img:'images/ribbed-tank.jpg',      cats:['women'] },
+  { id:'poplin-sundress', name:'Poplin Sundress',          label:'Dresses',     price:'₹3,300', img:'images/poplin-sundress.jpg',  cats:['women','summer','new'] },
+
+  { id:'rugby',           name:'Collegiate Rugby Shirt',   label:'Outerwear',   price:'₹3,200', img:'images/street-group.jpg',     cats:['men','new'] },
+  { id:'oxford-shirt',    name:'Oxford Weave Shirt',       label:'Shirts',      price:'₹2,950', img:'images/oxford-shirt.jpg',     cats:['men','summer'] },
+  { id:'relaxed-chino',   name:'Relaxed Chino',            label:'Trousers',    price:'₹3,100', img:'images/relaxed-chino.jpg',    cats:['men'] },
+  { id:'crewneck',        name:'Varsity Crewneck',         label:'Fleece',      price:'₹2,850', img:'images/folded-tee.jpg',       cats:['men','new'] },
+  { id:'denim-jacket',    name:'Washed Denim Jacket',      label:'Outerwear',   price:'₹4,800', img:'images/denim-jacket.jpg',     cats:['men'] },
+  { id:'terry-polo',      name:'Terry Polo',               label:'Tops',        price:'₹2,400', img:'images/terry-polo.jpg',       cats:['men','summer'] },
+
+  { id:'utility-overshirt', name:'Utility Overshirt',      label:'Outerwear',   price:'₹3,750', img:'images/utility-overshirt.jpg', cats:['new','men','women'] },
+
+  { id:'cap',              name:'Washed Six-Panel Cap',    label:'Headwear',    price:'₹1,400', img:'images/caps-stack.jpg',       cats:['accessories'] },
+  { id:'tote',             name:'Raw Canvas Tote',         label:'Bags',        price:'₹1,650', img:'images/tote-bags.jpg',        cats:['accessories'] },
+  { id:'leather-belt',     name:'Woven Leather Belt',      label:'Accessories', price:'₹1,950', img:'images/leather-belt.jpg',     cats:['accessories'] },
+  { id:'sunglasses',       name:'Recycled Sunglasses',     label:'Eyewear',     price:'₹2,200', img:'images/sunglasses.jpg',       cats:['accessories','summer'] },
+  { id:'ribbed-beanie',    name:'Ribbed Beanie',           label:'Headwear',    price:'₹1,100', img:'images/ribbed-beanie.jpg',    cats:['accessories'] }
+];
+
+let activeFilter = 'all';
+const saved = new Set();
+
+/* ---------------- RENDER GRID ---------------- */
+function matches(product, filter){
+  return filter === 'all' || product.cats.includes(filter);
+}
+
+function badgeMarkup(product){
+  const badges = [];
+  if(product.cats.includes('new')) badges.push('<span class="p-badge new">New</span>');
+  if(product.cats.includes('summer')) badges.push('<span class="p-badge summer">Summer</span>');
+  return badges.length ? `<div class="p-badges">${badges.join('')}</div>` : '';
+}
+
+function renderGrid(){
+  const grid = document.getElementById('productGrid');
+  const empty = document.getElementById('emptyState');
+  const list = PRODUCTS.filter(p => matches(p, activeFilter));
+
+  document.getElementById('resultCount').textContent = `${list.length} piece${list.length === 1 ? '' : 's'}`;
+  empty.classList.toggle('show', list.length === 0);
+
+  grid.innerHTML = list.map(p => `
+    <div class="p-card" data-id="${p.id}">
+      <div class="p-media">
+        ${badgeMarkup(p)}
+        <button class="wishlist-btn${saved.has(p.id) ? ' saved' : ''}" data-id="${p.id}" aria-label="Save ${p.name}">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s-7.5-4.6-10-9.3C.4 8.1 2.2 4.5 5.7 4a5 5 0 016.3 2.2A5 5 0 0118.3 4c3.5.5 5.3 4.1 3.7 7.7C19.5 16.4 12 21 12 21z"/></svg>
+        </button>
+        <img src="${p.img}" alt="${p.name}">
+      </div>
+      <div class="p-info">
+        <div class="p-label">${p.label}</div>
+        <h3>${p.name}</h3>
+        <div class="p-price">${p.price}</div>
+      </div>
+    </div>
+  `).join('');
+
+  grid.querySelectorAll('.wishlist-btn').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const id = btn.dataset.id;
+      if(saved.has(id)){ saved.delete(id); btn.classList.remove('saved'); }
+      else { saved.add(id); btn.classList.add('saved'); }
+    });
+  });
+}
+
+/* ---------------- FILTER WIRING ---------------- */
+function setFilter(filter){
+  activeFilter = filter;
+  document.querySelectorAll('.filter-pill').forEach(p => p.classList.toggle('active', p.dataset.filter === filter));
+  renderGrid();
+}
+
+document.getElementById('filterPills').addEventListener('click', (e) => {
+  const btn = e.target.closest('.filter-pill');
+  if(!btn) return;
+  setFilter(btn.dataset.filter);
+  document.getElementById('gridSection').scrollIntoView({ behavior:'smooth', block:'start' });
+});
+
+/* ---------------- INIT ---------------- */
+renderGrid();
+</script>
+
+</body>
+</html>

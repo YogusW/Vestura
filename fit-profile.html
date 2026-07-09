@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fit Profile — AI Stylist — Vestura</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,500;9..144,600;9..144,700;9..144,900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --olive:#0d2d1e;
+    --olive-2:#153a27;
+    --mint:#e7efda;
+    --off:#f7f6ee;
+    --ink:#0d2d1e;
+    --clay:#a98f56;
+    --sale:#a5462f;
+    --skin:#e3c8a0;
+    --skin-2:#c9a877;
+    --line: rgba(13,45,30,0.14);
+    --mauve:#8a5b6e;
+    --mauve-2:#734b5a;
+    --ivory:#ece7dc;
+    --ivory-2:#d9d2c2;
+    --hair-dark:#2a2016;
+    --beard:#3b2a1e;
+    --trans-blue:#5bcefa;
+    --trans-pink:#f5a9b8;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--off);
+    color:var(--ink);
+    font-family:'Inter',sans-serif;
+    overflow-x:hidden;
+    -webkit-font-smoothing:antialiased;
+  }
+  img{display:block;max-width:100%;height:auto;}
+  a{color:inherit;text-decoration:none;}
+  button{font-family:inherit;cursor:pointer;}
+
+  .eyebrow{
+    font-size:11px;letter-spacing:0.2em;text-transform:uppercase;font-weight:700;
+    display:flex;align-items:center;gap:10px;color:var(--olive);
+  }
+  .eyebrow::before{content:'';width:16px;height:1px;background:currentColor;display:inline-block;}
+  .display{font-family:'Fraunces',serif;font-optical-sizing:auto;font-weight:600;letter-spacing:-0.01em;line-height:0.98;}
+  .wordmark{font-family:'Fraunces',serif;font-weight:900;letter-spacing:-0.02em;}
+
+  /* ---------- NAV ---------- */
+  header{
+    position:sticky;top:0;left:0;right:0;z-index:100;
+    background:var(--off);
+    border-bottom:1px solid var(--line);
+    display:flex;align-items:center;justify-content:space-between;
+    padding:20px 5vw;color:var(--olive);
+  }
+  .nav-logo{font-size:22px;}
+  nav.nav-links{display:flex;gap:34px;font-size:13px;letter-spacing:.03em;text-transform:uppercase;font-weight:600;}
+  nav.nav-links a{position:relative;opacity:.82;transition:opacity .2s;}
+  nav.nav-links a:hover, nav.nav-links a.active{opacity:1;}
+  nav.nav-links a.active::after{content:'';position:absolute;left:0;bottom:-6px;height:2px;width:100%;background:var(--clay);}
+  .nav-cta{
+    border:1px solid var(--olive);padding:9px 20px;border-radius:100px;
+    font-size:12px;letter-spacing:.06em;text-transform:uppercase;font-weight:700;
+    transition:background .2s ease,color .2s ease;
+  }
+  .nav-cta:hover{background:var(--olive);color:var(--off);}
+
+  /* ---------- INTRO STRIP ---------- */
+  .intro{padding:56px 5vw 36px;}
+  .intro .eyebrow{margin-bottom:18px;}
+  .intro h1{font-size:clamp(28px,4.2vw,48px);max-width:18ch;color:var(--olive);}
+  .intro p{margin-top:14px;font-size:14.5px;max-width:56ch;line-height:1.7;opacity:.72;}
+
+  /* ---------- STYLIST LAYOUT ---------- */
+  .stylist{padding:0 5vw 100px;}
+  .stylist-grid{
+    display:grid;
+    grid-template-columns:280px 1fr 340px;
+    gap:22px;
+    align-items:start;
+  }
+
+  /* ---------- WISHLIST RAIL (left) ---------- */
+  .wishlist-rail{
+    background:var(--off);border:1px solid var(--line);border-radius:16px;
+    padding:22px 18px 26px;
+  }
+  .rail-title{font-family:'Fraunces',serif;font-weight:600;font-size:18px;color:var(--olive);}
+  .rail-sub{font-size:11.5px;opacity:.6;line-height:1.5;margin-top:4px;margin-bottom:18px;}
+
+  .wishlist-list{display:flex;flex-direction:column;gap:14px;}
+  .w-card{position:relative;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:var(--mint);}
+  .w-media{position:relative;aspect-ratio:4/3;overflow:hidden;}
+  .w-media img{width:100%;height:100%;object-fit:cover;transition:transform .5s ease;}
+  .w-card:hover .w-media img{transform:scale(1.06);}
+
+  .wishlist-btn{
+    position:absolute;top:8px;right:8px;z-index:3;
+    width:30px;height:30px;border-radius:50%;border:none;background:var(--off);
+    display:flex;align-items:center;justify-content:center;
+    transition:transform .2s ease,background .2s ease;
+  }
+  .wishlist-btn:hover{transform:scale(1.08);}
+  .wishlist-btn svg{width:14px;height:14px;color:var(--olive);transition:fill .15s,color .15s;}
+  .wishlist-btn.saved svg{fill:var(--sale);color:var(--sale);}
+
+  .size-popover{
+    position:absolute;top:44px;right:8px;z-index:5;
+    background:var(--olive);border-radius:10px;padding:9px;
+    display:none;gap:5px;flex-wrap:wrap;width:132px;
+    box-shadow:0 10px 24px rgba(13,45,30,0.28);
+  }
+  .size-popover.open{display:flex;}
+  .size-popover .sp-label{
+    width:100%;color:var(--mint);font-size:9px;letter-spacing:.06em;text-transform:uppercase;
+    opacity:.75;margin-bottom:2px;font-weight:700;
+  }
+  .size-popover button{
+    flex:1 1 26%;background:rgba(247,246,238,0.1);color:var(--off);border:1px solid rgba(247,246,238,0.25);
+    border-radius:6px;font-size:10px;font-weight:700;padding:5px 0;transition:background .15s;
+  }
+  .size-popover button:hover{background:var(--clay);border-color:var(--clay);}
+
+  .w-info{padding:11px 12px 13px;}
+  .w-info .p-label{font-size:10px;letter-spacing:.06em;text-transform:uppercase;opacity:.5;margin-bottom:3px;}
+  .w-info h3{font-family:'Fraunces',serif;font-weight:600;font-size:13.5px;color:var(--olive);line-height:1.3;}
+  .w-price{margin-top:5px;font-size:12.5px;font-weight:700;}
+
+  /* ---------- AVATAR STAGE (center) ---------- */
+  .stage{
+    background:var(--mint);
+    border-radius:16px;
+    padding:32px;
+    position:relative;
+    min-height:640px;
+    display:flex;
+    flex-direction:column;
+  }
+  .stage-head{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap;margin-bottom:10px;}
+  .stage-head h2{font-family:'Fraunces',serif;font-weight:600;font-size:22px;color:var(--olive);}
+  .stage-status{font-size:12px;font-weight:600;letter-spacing:.03em;opacity:.65;margin-top:4px;}
+  .stage-status b{color:var(--clay);font-weight:700;}
+  .reset-btn{
+    font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
+    border:1px solid var(--olive);border-radius:100px;padding:8px 16px;background:transparent;color:var(--olive);
+    transition:background .2s,color .2s;
+  }
+  .reset-btn:hover{background:var(--olive);color:var(--off);}
+
+  .avatar-wrap{flex:1;display:flex;align-items:center;justify-content:center;padding:10px 0 20px;position:relative;}
+  .avatar-badge{
+    position:absolute;top:2px;left:2px;display:flex;align-items:center;gap:6px;
+    background:rgba(13,45,30,0.9);color:var(--off);padding:6px 12px 6px 8px;border-radius:100px;
+    font-size:10px;font-weight:700;letter-spacing:.03em;text-transform:uppercase;
+  }
+  .avatar-badge svg{width:13px;height:13px;color:var(--clay);}
+  .avatar-svg{width:100%;max-width:270px;height:auto;filter:drop-shadow(0 18px 30px rgba(13,45,30,0.16));}
+  #figureWrap{transform-origin:50% 100%;transition:transform .5s cubic-bezier(.4,0,.2,1);}
+  #torsoSkin,#garmentShirt{transition:d .5s ease;}
+  #lowerBody{transform-box:fill-box;transform-origin:50% 0%;transition:transform .5s cubic-bezier(.4,0,.2,1);}
+  #leftArmGroup,#rightArmGroup{transform-box:fill-box;transition:transform .5s cubic-bezier(.4,0,.2,1);}
+  .hair-group, .cap-group, .tote-group, .face-group, .beard-group, .headband-group, .pin-group{transition:opacity .3s ease;}
+  .hidden-part{opacity:0;pointer-events:none;}
+
+  .stage-tags{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-top:6px;}
+  .stage-tag{font-size:11px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;background:var(--off);color:var(--olive);padding:7px 14px;border-radius:100px;}
+
+  .similar{border-top:1px solid rgba(13,45,30,0.12);margin-top:20px;padding-top:20px;}
+  .similar-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;}
+  .similar-head span{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;opacity:.6;}
+  .similar-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;}
+  .similar-card{background:var(--off);border-radius:10px;overflow:hidden;}
+  .similar-card .simg{aspect-ratio:4/5;overflow:hidden;background:var(--line);}
+  .similar-card img{width:100%;height:100%;object-fit:cover;}
+  .similar-card .sinfo{padding:9px 10px 11px;}
+  .similar-card h4{font-family:'Fraunces',serif;font-size:12.5px;font-weight:600;color:var(--olive);line-height:1.3;}
+  .similar-card .sprice{font-size:11px;font-weight:700;margin-top:3px;opacity:.75;}
+
+  /* ---------- SETTINGS PANEL (right) ---------- */
+  .panel{
+    background:var(--off);border:1px solid var(--line);border-radius:16px;
+    padding:26px 24px 28px;
+  }
+  .panel-title{font-family:'Fraunces',serif;font-weight:600;font-size:19px;color:var(--olive);margin-bottom:4px;}
+  .panel-sub{font-size:12.5px;opacity:.6;line-height:1.5;margin-bottom:24px;}
+
+  .field{margin-bottom:24px;}
+  .field:last-of-type{margin-bottom:0;}
+  .field-label{
+    font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--olive);
+    display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;
+  }
+  .field-label .val{color:var(--clay);font-weight:700;}
+
+  .pill-row{display:flex;gap:8px;flex-wrap:wrap;}
+  .pill{
+    border:1px solid var(--line);background:var(--off);color:var(--olive);
+    padding:9px 15px;border-radius:100px;font-size:12.5px;font-weight:600;
+    transition:background .18s,color .18s,border-color .18s;
+  }
+  .pill:hover{border-color:var(--olive);}
+  .pill.active{background:var(--olive);color:var(--off);border-color:var(--olive);}
+
+  .shape-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+  .shape-card{
+    border:1px solid var(--line);background:var(--off);border-radius:10px;
+    padding:12px 10px;text-align:left;transition:border-color .18s,background .18s;
+  }
+  .shape-card:hover{border-color:var(--olive);}
+  .shape-card.active{border-color:var(--olive);background:var(--mint);}
+  .shape-card .icon{width:22px;height:22px;color:var(--olive);margin-bottom:8px;}
+  .shape-card h5{font-size:12.5px;font-weight:700;color:var(--olive);}
+  .shape-card p{font-size:10.5px;opacity:.6;margin-top:2px;line-height:1.4;}
+
+  .size-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:6px;}
+  .size-grid .pill{padding:9px 0;text-align:center;font-size:11.5px;}
+
+  input[type="range"]{-webkit-appearance:none;width:100%;height:4px;border-radius:4px;background:var(--line);outline:none;margin-top:6px;}
+  input[type="range"]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:18px;border-radius:50%;background:var(--olive);cursor:pointer;border:3px solid var(--off);box-shadow:0 0 0 1px var(--olive);}
+  input[type="range"]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;background:var(--olive);cursor:pointer;border:3px solid var(--off);box-shadow:0 0 0 1px var(--olive);}
+  .range-marks{display:flex;justify-content:space-between;font-size:10px;opacity:.45;margin-top:6px;}
+
+  .panel-note{margin-top:24px;padding-top:20px;border-top:1px solid var(--line);font-size:11.5px;line-height:1.7;opacity:.6;}
+
+  /* ---------- FOOTER ---------- */
+  footer{background:var(--olive);color:var(--off);padding:60px 5vw 26px;}
+  .foot-top{display:flex;justify-content:space-between;align-items:center;padding-bottom:36px;border-bottom:1px solid rgba(247,246,238,0.18);flex-wrap:wrap;gap:20px;}
+  .foot-top .wordmark{font-size:26px;}
+  .foot-links{display:flex;gap:28px;font-size:13px;text-transform:uppercase;letter-spacing:.04em;font-weight:600;opacity:.85;}
+  .foot-bottom{display:flex;justify-content:space-between;padding-top:20px;font-size:12px;opacity:.55;flex-wrap:wrap;gap:10px;}
+
+  /* ---------- RESPONSIVE ---------- */
+  @media (max-width:1180px){
+    .stylist-grid{grid-template-columns:240px 1fr 320px;}
+  }
+  @media (max-width:980px){
+    .stylist-grid{grid-template-columns:1fr;}
+    .wishlist-list{flex-direction:row;flex-wrap:wrap;}
+    .w-card{width:calc(50% - 7px);}
+    .similar-grid{grid-template-columns:repeat(2,1fr);}
+  }
+  @media (max-width:900px){ nav.nav-links{display:none;} }
+  @media (max-width:560px){
+    .shape-grid{grid-template-columns:1fr 1fr;}
+    .size-grid{grid-template-columns:repeat(3,1fr);}
+    .w-card{width:100%;}
+    .intro{padding:44px 6vw 26px;}
+    .stylist{padding:0 6vw 80px;}
+  }
+  @media (prefers-reduced-motion:reduce){*{animation:none !important;transition:none !important;}}
+</style>
+</head>
+<body>
+
+<header id="siteHeader">
+  <div class="nav-logo wordmark">VESTURA</div>
+  <nav class="nav-links">
+    <a href="index.html">Home</a>    
+    <a href="about.html">About</a>
+    <a href="fit-profile.html" class="active">AI Stylist</a>
+    <a href="collection.html">Collection</a>
+    <a href="contact.html">Contact Us</a>
+  </nav>
+  <a href="fit-profile.html" class="nav-cta">Cart</a>
+</header>
+
+<section class="intro">
+  <div class="eyebrow">AI Stylist</div>
+  <h1 class="display">See it on your shape before it's in your cart.</h1>
+  <p>Set your gender, body type, size and height once — save anything from the rail on the left and it appears on the avatar instantly, styled to your actual shape.</p>
+</section>
+
+<section class="stylist">
+  <div class="stylist-grid">
+
+    <!-- WISHLIST RAIL (left) -->
+    <div class="wishlist-rail">
+      <div class="rail-title">Wishlist &amp; Try On</div>
+      <div class="rail-sub">Tap the heart, pick a size — it goes straight onto your avatar.</div>
+      <div class="wishlist-list" id="wishlistList"></div>
+    </div>
+
+    <!-- AVATAR STAGE (center) -->
+    <div class="stage">
+      <div class="stage-head">
+        <div>
+          <h2>Your Avatar</h2>
+          <div class="stage-status" id="stageStatus">Now showing: <b>Base fit</b></div>
+        </div>
+        <button class="reset-btn" id="resetBtn">Reset</button>
+      </div>
+
+      <div class="avatar-wrap">
+        <div class="avatar-badge">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l1.8 5.6H20l-4.6 3.4 1.8 5.6L12 13.2 6.8 16.6l1.8-5.6L4 7.6h6.2z"/></svg>
+          AI-generated
+        </div>
+        <svg class="avatar-svg" id="avatarSvg" viewBox="0 0 320 560" xmlns="http://www.w3.org/2000/svg">
+          <g id="figureWrap">
+            <!-- lower body: legs -->
+            <g id="lowerBody">
+              <path d="M120 300 L112 520 Q112 534 128 534 L142 534 Q150 534 151 522 L158 340 L162 340 L169 522 Q170 534 178 534 L192 534 Q208 534 208 520 L200 300 Z" fill="var(--skin-2)" id="legsFill"/>
+              <!-- sneakers -->
+              <path id="shoeLeft" d="M104 508 Q104 500 114 500 L142 500 Q150 500 152 508 L154 520 Q155 528 146 530 L108 530 Q100 529 100 521 Z" fill="var(--off)" stroke="var(--olive)" stroke-width="2"/>
+              <path id="shoeRight" d="M166 508 Q166 500 176 500 L204 500 Q212 500 214 508 L216 520 Q217 528 209 530 L171 530 Q163 529 163 521 Z" fill="var(--off)" stroke="var(--olive)" stroke-width="2"/>
+            </g>
+
+            <!-- upper body: torso, arms, garment -->
+            <g id="upperBody">
+              <!-- arms -->
+              <g id="leftArmGroup">
+                <path d="M104 180 Q78 200 74 260 Q72 292 84 316 L104 308 Q96 280 100 258 Q104 226 122 200 Z" fill="var(--skin)"/>
+                <circle cx="88" cy="320" r="13" fill="var(--skin-2)"/>
+              </g>
+              <g id="rightArmGroup">
+                <path d="M216 180 Q242 200 246 260 Q248 292 236 316 L216 308 Q224 280 220 258 Q216 226 198 200 Z" fill="var(--skin)"/>
+                <circle cx="232" cy="320" r="13" fill="var(--skin-2)"/>
+              </g>
+
+              <!-- neck -->
+              <rect x="146" y="118" width="28" height="30" fill="var(--skin-2)"/>
+
+              <!-- torso base (skin, mostly covered) -->
+              <path id="torsoSkin" d="M112 176 Q160 150 208 176 L214 300 Q160 318 106 300 Z" fill="var(--skin)"/>
+
+              <!-- garment: shirt -->
+              <g id="garmentShirtGroup">
+                <path id="garmentShirt" d="M108 172 Q160 144 212 172 L214 302 Q160 322 106 302 Z" fill="var(--olive)"/>
+                <rect id="shirtStripe" x="118" y="256" width="84" height="12" rx="6" fill="var(--off)" opacity="0"/>
+                <path id="shirtSeamLeft" d="M136 168 L128 300" fill="none" stroke="var(--olive)" stroke-width="1.5" opacity="0"/>
+                <path id="shirtSeamRight" d="M184 168 L192 300" fill="none" stroke="var(--olive)" stroke-width="1.5" opacity="0"/>
+                <path id="shirtCollar" d="M138 158 Q160 176 182 158 L176 148 Q160 162 144 148 Z" fill="var(--off)"/>
+                <!-- small pride pin, shown on men's base tee -->
+                <g id="pinGroup" class="pin-group hidden-part">
+                  <rect x="148" y="200" width="20" height="15" rx="2" fill="var(--off)" stroke="var(--olive)" stroke-width="0.75"/>
+                  <rect x="149.5" y="201.5" width="17" height="2.4" fill="var(--trans-blue)"/>
+                  <rect x="149.5" y="204" width="17" height="2.4" fill="var(--trans-pink)"/>
+                  <rect x="149.5" y="206.4" width="17" height="2.4" fill="#ffffff"/>
+                  <rect x="149.5" y="208.8" width="17" height="2.4" fill="var(--trans-pink)"/>
+                  <rect x="149.5" y="211.2" width="17" height="2.4" fill="var(--trans-blue)"/>
+                </g>
+              </g>
+
+              <!-- head + face + hair -->
+              <circle cx="160" cy="90" r="38" fill="var(--skin)"/>
+
+              <g id="faceGroup" class="face-group">
+                <ellipse cx="148" cy="86" rx="3" ry="4" fill="var(--olive-2)"/>
+                <ellipse cx="172" cy="86" rx="3" ry="4" fill="var(--olive-2)"/>
+                <path d="M147 104 Q160 112 173 104" fill="none" stroke="var(--olive-2)" stroke-width="2.4" stroke-linecap="round"/>
+              </g>
+
+              <g id="hairMen" class="hair-group">
+                <path d="M120 86 Q116 46 160 44 Q204 46 200 86 Q202 60 160 58 Q118 60 120 86Z" fill="var(--hair-dark)"/>
+              </g>
+              <g id="beardGroup" class="beard-group">
+                <path d="M126 96 Q124 122 160 128 Q196 122 194 96 Q196 116 160 121 Q124 116 126 96Z" fill="var(--beard)"/>
+                <path d="M144 100 Q160 106 176 100 L174 104 Q160 109 146 104Z" fill="var(--beard)"/>
+              </g>
+
+              <g id="hairWomen" class="hair-group hidden-part">
+                <path d="M118 90 Q112 44 160 42 Q208 44 202 90 Q206 130 196 150 Q198 108 190 92 Q160 108 130 92 Q122 108 124 150 Q114 130 118 90Z" fill="var(--hair-dark)"/>
+              </g>
+              <g id="headbandGroup" class="headband-group hidden-part">
+                <path d="M116 72 Q160 58 204 72 L202 82 Q160 68 118 82 Z" fill="var(--off)" stroke="var(--olive)" stroke-width="1"/>
+              </g>
+
+              <!-- cap accessory -->
+              <g id="capGroup" class="cap-group hidden-part">
+                <path d="M118 68 Q160 34 202 68 Q206 76 198 78 L122 78 Q114 76 118 68Z" fill="var(--clay)"/>
+                <path d="M118 78 Q160 88 202 78 L208 86 Q160 98 112 86Z" fill="var(--clay)"/>
+              </g>
+
+              <!-- tote accessory -->
+              <g id="toteGroup" class="tote-group hidden-part">
+                <path d="M70 330 L106 330 L112 384 L64 384 Z" fill="var(--clay)"/>
+                <path d="M78 330 Q78 312 88 312 Q98 312 98 330" fill="none" stroke="var(--clay)" stroke-width="4"/>
+              </g>
+            </g>
+          </g>
+        </svg>
+      </div>
+
+      <div class="stage-tags" id="stageTags"></div>
+
+      <div class="similar" id="similarSection" style="display:none;">
+        <div class="similar-head"><span>Similar items for this fit</span></div>
+        <div class="similar-grid" id="similarGrid"></div>
+      </div>
+    </div>
+
+    <!-- SETTINGS PANEL (right) -->
+    <div class="panel">
+      <div class="panel-title">Style Settings</div>
+      <div class="panel-sub">Update any field and your avatar redraws instantly.</div>
+
+      <div class="field">
+        <div class="field-label">Gender</div>
+        <div class="pill-row" id="genderRow">
+          <button class="pill" data-value="women">Women</button>
+          <button class="pill" data-value="men">Men</button>
+        </div>
+      </div>
+
+      <div class="field">
+        <div class="field-label">Body Type</div>
+        <div class="shape-grid" id="shapeGrid"></div>
+      </div>
+
+      <div class="field">
+        <div class="field-label">Height <span class="val" id="heightVal">170 cm</span></div>
+        <input type="range" id="heightSlider" min="150" max="200" value="170" step="1">
+        <div class="range-marks"><span>150</span><span>175</span><span>200</span></div>
+      </div>
+
+      <div class="field">
+        <div class="field-label">Size</div>
+        <div class="size-grid" id="sizeGrid">
+          <button class="pill" data-value="XS">XS</button>
+          <button class="pill" data-value="S">S</button>
+          <button class="pill active" data-value="M">M</button>
+          <button class="pill" data-value="L">L</button>
+          <button class="pill" data-value="XL">XL</button>
+          <button class="pill" data-value="XXL">XXL</button>
+        </div>
+      </div>
+
+      <div class="panel-note">Your Fit Profile is stored for this session only and shapes the avatar above — sizes on saved items sync back here automatically.</div>
+    </div>
+
+  </div>
+</section>
+
+<footer>
+  <div class="foot-top">
+    <div class="wordmark">VESTURA</div>
+    <div class="foot-links">
+      <a href="index.html#best">Collection</a>
+      <a href="fit-profile.html">Fit Profile</a>
+      <a href="about.html">About</a>
+    </div>
+  </div>
+  <div class="foot-bottom">
+    <span>© 2024–2026 Vestura. All rights reserved.</span>
+    <span>@vestura · vestura.com</span>
+  </div>
+</footer>
+
+<script>
+/* ---------------- DATA ---------------- */
+const PRODUCTS = [
+  { id:'rugby',    name:'Collegiate Rugby Shirt', label:'Outerwear',  price:'₹3,200', img:'images/street-group.jpg',  garment:'rugby'  },
+  { id:'cap',      name:'Washed Six-Panel Cap',   label:'Headwear',   price:'₹1,400', img:'images/caps-stack.jpg',    garment:'cap'    },
+  { id:'tote',     name:'Raw Canvas Tote',        label:'Accessories',price:'₹1,650', img:'images/tote-bags.jpg',     garment:'tote'   },
+  { id:'crewneck', name:'Varsity Crewneck',       label:'Fleece',     price:'₹2,850', img:'images/folded-tee.jpg',    garment:'crewneck'}
+];
+const SIZES = ['XS','S','M','L','XL','XXL'];
+
+/* Real body-type presets: half-widths (px) at shoulder / chest / waist / hip */
+const BASE = { shoulder:52, chest:50, waist:42, hip:54 };
+
+const GENDER_SHAPES = {
+  women:{
+    hourglass: { label:'Hourglass', desc:'Balanced shoulders & hips, defined waist', hw:{shoulder:50, chest:48, waist:32, hip:52} },
+    pear:      { label:'Pear',      desc:'Narrower top, fuller through the hip',     hw:{shoulder:42, chest:40, waist:34, hip:58} },
+    apple:     { label:'Apple',     desc:'Fuller through the middle',                hw:{shoulder:48, chest:52, waist:50, hip:42} },
+    rectangle: { label:'Rectangle', desc:'Straight, minimal waist taper',            hw:{shoulder:44, chest:42, waist:40, hip:44} }
+  },
+  men:{
+    trapezoid: { label:'Trapezoid', desc:'Broad shoulders, lean waist',   hw:{shoulder:60, chest:54, waist:38, hip:40} },
+    rectangle: { label:'Rectangle', desc:'Straight, balanced build',      hw:{shoulder:50, chest:48, waist:46, hip:46} },
+    triangle:  { label:'Triangle',  desc:'Narrower shoulders, fuller waist', hw:{shoulder:42, chest:44, waist:52, hip:50} },
+    oval:      { label:'Oval',      desc:'Rounder through the middle',    hw:{shoulder:52, chest:56, waist:58, hip:48} }
+  }
+};
+
+/* ---------------- STATE ---------------- */
+const state = {
+  gender:'women',
+  bodyShape:'hourglass',
+  height:170,
+  size:'M',
+  garment:null
+};
+
+const sizeDelta = { XS:-0.08, S:-0.04, M:0, L:0.05, XL:0.10, XXL:0.16 };
+
+function clamp(v,min,max){ return Math.max(min, Math.min(max, v)); }
+
+/* ---------------- PATH BUILDER ---------------- */
+function buildTorsoD(hw, offset){
+  const cx = 160;
+  const s = hw.shoulder + offset, c = hw.chest + offset, w = hw.waist + offset, h = hw.hip + offset;
+  const yTop = 172, yChest = 212, yWaist = 256, yHip = 300;
+  return `M${cx} ${yTop-6}
+    Q${cx-s} ${yTop-10} ${cx-s} ${yTop+8}
+    C${cx-c} ${yChest-6} ${cx-w} ${yWaist-10} ${cx-w} ${yWaist}
+    C${cx-w} ${yWaist+12} ${cx-h} ${yHip-14} ${cx-h} ${yHip}
+    L${cx+h} ${yHip}
+    C${cx+h} ${yHip-14} ${cx+w} ${yWaist+12} ${cx+w} ${yWaist}
+    C${cx+w} ${yWaist-10} ${cx+c} ${yChest-6} ${cx+s} ${yTop+8}
+    Q${cx+s} ${yTop-10} ${cx} ${yTop-6}
+    Z`;
+}
+
+/* ---------------- RENDER SHAPE OPTIONS ---------------- */
+function renderShapeGrid(){
+  const wrap = document.getElementById('shapeGrid');
+  const shapes = GENDER_SHAPES[state.gender];
+  wrap.innerHTML = Object.entries(shapes).map(([key, s]) => `
+    <button class="shape-card${key === state.bodyShape ? ' active' : ''}" data-value="${key}">
+      <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3a3 3 0 100 6 3 3 0 000-6zM8 21c0-5 1-8 4-8s4 3 4 8"/></svg>
+      <h5>${s.label}</h5><p>${s.desc}</p>
+    </button>
+  `).join('');
+}
+
+/* ---------------- RENDER AVATAR ---------------- */
+function renderAvatar(){
+  const shape = GENDER_SHAPES[state.gender][state.bodyShape];
+  const widthScale = 1 + sizeDelta[state.size];
+  const hw = {
+    shoulder: shape.hw.shoulder * widthScale,
+    chest:    shape.hw.chest    * widthScale,
+    waist:    shape.hw.waist    * widthScale,
+    hip:      shape.hw.hip      * widthScale
+  };
+  const heightScale = clamp(0.9 + (state.height - 150) * (0.2/50), 0.9, 1.1);
+
+  document.getElementById('torsoSkin').setAttribute('d', buildTorsoD(hw, -4));
+  document.getElementById('garmentShirt').setAttribute('d', buildTorsoD(hw, 4));
+
+  const stripe = document.getElementById('shirtStripe');
+  stripe.setAttribute('x', 160 - hw.waist - 4);
+  stripe.setAttribute('width', 2 * (hw.waist + 4));
+
+  const seamLeft = document.getElementById('shirtSeamLeft');
+  const seamRight = document.getElementById('shirtSeamRight');
+  seamLeft.setAttribute('d', `M${160 - hw.chest*0.55} 168 L${160 - hw.waist*0.6} 300`);
+  seamRight.setAttribute('d', `M${160 + hw.chest*0.55} 168 L${160 + hw.waist*0.6} 300`);
+
+  const armOffset = hw.shoulder - BASE.shoulder;
+  document.getElementById('leftArmGroup').style.transform = `translateX(${-armOffset}px)`;
+  document.getElementById('rightArmGroup').style.transform = `translateX(${armOffset}px)`;
+
+  document.getElementById('lowerBody').style.transform = `scaleX(${hw.hip / BASE.hip})`;
+  document.getElementById('figureWrap').style.transform = `scaleY(${heightScale})`;
+
+  const isMen = state.gender === 'men';
+  document.getElementById('hairMen').classList.toggle('hidden-part', !isMen);
+  document.getElementById('beardGroup').classList.toggle('hidden-part', !isMen);
+  document.getElementById('hairWomen').classList.toggle('hidden-part', isMen);
+  document.getElementById('headbandGroup').classList.toggle('hidden-part', isMen);
+
+  const cap  = document.getElementById('capGroup');
+  const tote = document.getElementById('toteGroup');
+  cap.classList.toggle('hidden-part', state.garment !== 'cap');
+  tote.classList.toggle('hidden-part', state.garment !== 'tote');
+
+  const shirtMain = document.getElementById('garmentShirt');
+  const pin = document.getElementById('pinGroup');
+  pin.classList.add('hidden-part');
+  seamLeft.setAttribute('opacity','0');
+  seamRight.setAttribute('opacity','0');
+
+  if(state.garment === 'crewneck'){
+    shirtMain.setAttribute('fill','var(--mint)');
+    stripe.setAttribute('opacity','1');
+    stripe.setAttribute('fill','var(--olive)');
+  } else if(state.garment === 'rugby'){
+    shirtMain.setAttribute('fill','var(--olive)');
+    stripe.setAttribute('opacity','1');
+    stripe.setAttribute('fill','var(--off)');
+  } else if(!state.garment && isMen){
+    /* base fit — men: mauve tee with pride pin, matching reference avatar */
+    shirtMain.setAttribute('fill','var(--mauve)');
+    stripe.setAttribute('opacity','0');
+    pin.classList.remove('hidden-part');
+  } else if(!state.garment && !isMen){
+    /* base fit — women: ivory jumpsuit with piped seams, matching reference avatar */
+    shirtMain.setAttribute('fill','var(--ivory)');
+    stripe.setAttribute('opacity','0');
+    seamLeft.setAttribute('opacity','1');
+    seamRight.setAttribute('opacity','1');
+    document.getElementById('legsFill').setAttribute('fill','var(--ivory-2)');
+  } else {
+    shirtMain.setAttribute('fill','var(--olive)');
+    stripe.setAttribute('opacity','0');
+  }
+
+  if(state.garment || isMen){
+    document.getElementById('legsFill').setAttribute('fill','var(--skin-2)');
+  }
+
+  document.getElementById('heightVal').textContent = state.height + ' cm';
+
+  const product = PRODUCTS.find(p => p.id === state.garment);
+  document.getElementById('stageStatus').innerHTML = product
+    ? `Now showing: <b>${product.name}</b> · Size ${state.size}`
+    : `Now showing: <b>Base fit</b>`;
+
+  renderTags(product, shape);
+  renderSimilar(product);
+}
+
+function renderTags(product, shape){
+  const wrap = document.getElementById('stageTags');
+  const genderLabel = state.gender === 'women' ? 'Women' : 'Men';
+  const tags = [genderLabel, shape.label, state.height + ' cm', 'Size ' + state.size];
+  if(product) tags.unshift(product.label);
+  wrap.innerHTML = tags.map(t => `<span class="stage-tag">${t}</span>`).join('');
+}
+
+function renderSimilar(product){
+  const section = document.getElementById('similarSection');
+  const grid = document.getElementById('similarGrid');
+  if(!product){ section.style.display = 'none'; return; }
+  section.style.display = 'block';
+  const others = PRODUCTS.filter(p => p.id !== product.id).slice(0,3);
+  grid.innerHTML = others.map(p => `
+    <div class="similar-card">
+      <div class="simg"><img src="${p.img}" alt="${p.name}"></div>
+      <div class="sinfo"><h4>${p.name}</h4><div class="sprice">${p.price}</div></div>
+    </div>
+  `).join('');
+}
+
+/* ---------------- SELECT A PRODUCT (from wishlist) ---------------- */
+function selectProduct(productId, size){
+  state.garment = productId;
+  state.size = size;
+  syncSizePills();
+  renderAvatar();
+  document.querySelector('.stage').scrollIntoView({ behavior:'smooth', block:'start' });
+}
+
+/* ---------------- BUILD WISHLIST RAIL ---------------- */
+function buildWishlist(){
+  const list = document.getElementById('wishlistList');
+  const wishlistProducts = PRODUCTS.slice(0, 2);
+  list.innerHTML = wishlistProducts.map(p => `
+    <div class="w-card" data-id="${p.id}">
+      <div class="w-media">
+        <button class="wishlist-btn" data-id="${p.id}" aria-label="Save ${p.name}">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s-7.5-4.6-10-9.3C.4 8.1 2.2 4.5 5.7 4a5 5 0 016.3 2.2A5 5 0 0118.3 4c3.5.5 5.3 4.1 3.7 7.7C19.5 16.4 12 21 12 21z"/></svg>
+        </button>
+        <div class="size-popover" data-id="${p.id}">
+          <div class="sp-label">Pick a size</div>
+          ${SIZES.map(s => `<button data-id="${p.id}" data-size="${s}">${s}</button>`).join('')}
+        </div>
+        <img src="${p.img}" alt="${p.name}">
+      </div>
+      <div class="w-info">
+        <div class="p-label">${p.label}</div>
+        <h3>${p.name}</h3>
+        <div class="w-price">${p.price}</div>
+      </div>
+    </div>
+  `).join('');
+
+  list.querySelectorAll('.wishlist-btn').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const id = btn.dataset.id;
+      document.querySelectorAll('.size-popover').forEach(pop => {
+        pop.classList.toggle('open', pop.dataset.id === id && !pop.classList.contains('open'));
+      });
+    });
+  });
+
+  list.querySelectorAll('.size-popover button').forEach(sBtn => {
+    sBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const id = sBtn.dataset.id;
+      const size = sBtn.dataset.size;
+      document.querySelector(`.wishlist-btn[data-id="${id}"]`).classList.add('saved');
+      document.querySelector(`.size-popover[data-id="${id}"]`).classList.remove('open');
+      selectProduct(id, size);
+    });
+  });
+}
+
+/* ---------------- SETTINGS PANEL WIRING ---------------- */
+function syncSizePills(){
+  document.querySelectorAll('#sizeGrid .pill').forEach(p => {
+    p.classList.toggle('active', p.dataset.value === state.size);
+  });
+}
+
+document.getElementById('genderRow').addEventListener('click', (e) => {
+  const btn = e.target.closest('.pill');
+  if(!btn) return;
+  document.querySelectorAll('#genderRow .pill').forEach(p => p.classList.remove('active'));
+  btn.classList.add('active');
+  state.gender = btn.dataset.value;
+  const firstShape = Object.keys(GENDER_SHAPES[state.gender])[0];
+  if(!GENDER_SHAPES[state.gender][state.bodyShape]) state.bodyShape = firstShape;
+  renderShapeGrid();
+  renderAvatar();
+});
+
+document.getElementById('shapeGrid').addEventListener('click', (e) => {
+  const card = e.target.closest('.shape-card');
+  if(!card) return;
+  document.querySelectorAll('#shapeGrid .shape-card').forEach(c => c.classList.remove('active'));
+  card.classList.add('active');
+  state.bodyShape = card.dataset.value;
+  renderAvatar();
+});
+
+document.getElementById('sizeGrid').addEventListener('click', (e) => {
+  const btn = e.target.closest('.pill');
+  if(!btn) return;
+  state.size = btn.dataset.value;
+  syncSizePills();
+  renderAvatar();
+});
+
+document.getElementById('heightSlider').addEventListener('input', (e) => {
+  state.height = parseInt(e.target.value, 10);
+  renderAvatar();
+});
+
+document.getElementById('resetBtn').addEventListener('click', () => {
+  state.garment = null;
+  document.querySelectorAll('.wishlist-btn').forEach(b => b.classList.remove('saved'));
+  renderAvatar();
+});
+
+document.addEventListener('click', (e) => {
+  if(!e.target.closest('.wishlist-btn') && !e.target.closest('.size-popover')){
+    document.querySelectorAll('.size-popover').forEach(pop => pop.classList.remove('open'));
+  }
+});
+
+/* ---------------- INIT ---------------- */
+document.querySelector('#genderRow .pill[data-value="women"]').classList.add('active');
+renderShapeGrid();
+document.querySelector('#shapeGrid .shape-card[data-value="hourglass"]').classList.add('active');
+buildWishlist();
+renderAvatar();
+</script>
+
+</body>
+</html>

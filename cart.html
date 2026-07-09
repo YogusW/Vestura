@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vestura — Cart & Checkout</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,500;9..144,600;9..144,700;9..144,900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --olive:#0d2d1e;
+    --olive-2:#153a27;
+    --mint:#e7efda;
+    --off:#f7f6ee;
+    --ink:#0d2d1e;
+    --clay:#a98f56;
+    --sale:#a5462f;
+    --line: rgba(13,45,30,0.14);
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--off);
+    color:var(--ink);
+    font-family:'Inter',sans-serif;
+    overflow-x:hidden;
+    -webkit-font-smoothing:antialiased;
+  }
+  img{display:block;max-width:100%;height:auto;}
+  a{color:inherit;text-decoration:none;}
+  button{font-family:inherit;cursor:pointer;}
+
+  .eyebrow{
+    font-size:11px;letter-spacing:0.2em;text-transform:uppercase;font-weight:700;
+    display:flex;align-items:center;gap:10px;color:var(--olive);
+  }
+  .eyebrow::before{content:'';width:16px;height:1px;background:currentColor;display:inline-block;}
+
+  .display{font-family:'Fraunces',serif;font-optical-sizing:auto;font-weight:600;letter-spacing:-0.01em;line-height:0.98;}
+  .wordmark{font-family:'Fraunces',serif;font-weight:900;letter-spacing:-0.02em;}
+
+  /* ---------- NAV ---------- */
+  header{
+    position:sticky;top:0;left:0;right:0;z-index:100;
+    display:flex;align-items:center;justify-content:space-between;
+    padding:16px 5vw;color:var(--olive);
+    background:var(--off);box-shadow:0 1px 0 var(--line);
+  }
+  .nav-logo{font-size:22px;}
+  nav.nav-links{display:flex;gap:34px;font-size:13px;letter-spacing:.03em;text-transform:uppercase;font-weight:600;}
+  nav.nav-links a{position:relative;opacity:.85;transition:opacity .2s;}
+  nav.nav-links a:hover{opacity:1;}
+  .nav-cta{
+    border:1px solid currentColor;padding:9px 20px;border-radius:100px;
+    font-size:12px;letter-spacing:.06em;text-transform:uppercase;font-weight:700;
+    transition:background .2s ease,color .2s ease;
+    display:inline-flex;align-items:center;gap:8px;
+  }
+  .nav-cta:hover{background:var(--olive);color:var(--off);}
+  .nav-cta .count{
+    background:var(--olive);color:var(--off);border-radius:50%;
+    width:18px;height:18px;font-size:10px;display:flex;align-items:center;justify-content:center;font-weight:700;
+  }
+  .nav-cta:hover .count{background:var(--off);color:var(--olive);}
+
+  .btn-primary{
+    background:var(--olive);color:var(--off);
+    padding:17px 32px;border-radius:100px;border:none;
+    font-size:13px;letter-spacing:.05em;text-transform:uppercase;font-weight:700;
+    display:inline-flex;align-items:center;justify-content:center;gap:10px;
+    transition:transform .2s ease, background .2s ease;
+    width:100%;
+  }
+  .btn-primary:hover{transform:translateY(-2px);background:var(--olive-2);}
+  .btn-primary svg{width:16px;height:16px;}
+  .btn-primary:disabled{opacity:.4;cursor:not-allowed;transform:none;}
+
+  .btn-ghost{
+    background:transparent;color:var(--olive);
+    padding:13px 20px;border-radius:100px;border:1px solid var(--line);
+    font-size:12px;letter-spacing:.05em;text-transform:uppercase;font-weight:700;
+    transition:background .2s ease,color .2s ease;
+  }
+  .btn-ghost:hover{background:var(--olive);color:var(--off);border-color:var(--olive);}
+
+  /* ---------- PAGE HEAD ---------- */
+  .page-head{padding:60px 5vw 10px;}
+  .page-head h1{font-size:clamp(30px,4vw,48px);color:var(--olive);}
+  .steps{
+    display:flex;gap:10px;align-items:center;margin-top:22px;
+    font-size:12px;letter-spacing:.05em;text-transform:uppercase;font-weight:700;color:var(--olive);
+  }
+  .steps .step{opacity:.4;display:flex;align-items:center;gap:8px;}
+  .steps .step.active{opacity:1;}
+  .steps .step b{
+    width:22px;height:22px;border-radius:50%;background:var(--olive);color:var(--off);
+    display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-size:12px;
+  }
+  .steps .step:not(.active) b{background:transparent;border:1px solid var(--line);color:var(--olive);}
+  .steps .sep{width:28px;height:1px;background:var(--line);}
+
+  /* ---------- LAYOUT ---------- */
+  .cart-wrap{
+    display:grid;grid-template-columns:1.6fr 1fr;gap:60px;
+    padding:40px 5vw 120px;align-items:start;
+  }
+
+  /* cart list */
+  .cart-items{display:flex;flex-direction:column;}
+  .cart-item{
+    display:grid;grid-template-columns:104px 1fr auto;gap:20px;
+    padding:26px 0;border-bottom:1px solid var(--line);
+  }
+  .cart-item .media{width:104px;height:130px;border-radius:8px;overflow:hidden;background:var(--mint);}
+  .cart-item .media img{width:100%;height:100%;object-fit:cover;}
+  .item-info .p-label{font-size:11px;letter-spacing:.06em;text-transform:uppercase;opacity:.5;margin-bottom:4px;}
+  .item-info h3{font-family:'Fraunces',serif;font-weight:600;font-size:17px;color:var(--olive);}
+  .item-info .variant{font-size:12px;opacity:.6;margin-top:4px;}
+  .item-controls{
+    display:flex;flex-direction:column;align-items:flex-end;justify-content:space-between;gap:10px;height:130px;
+  }
+  .qty-stepper{
+    display:flex;align-items:center;border:1px solid var(--line);border-radius:100px;
+  }
+  .qty-stepper button{
+    width:28px;height:28px;background:none;border:none;font-size:14px;color:var(--olive);
+  }
+  .qty-stepper span{width:24px;text-align:center;font-size:13px;font-weight:600;}
+  .item-price{font-weight:700;font-size:15px;}
+  .item-remove{
+    font-size:11px;letter-spacing:.05em;text-transform:uppercase;font-weight:700;opacity:.5;
+    border-bottom:1px solid transparent;
+  }
+  .item-remove:hover{opacity:1;border-color:currentColor;}
+
+  .empty-cart{
+    text-align:center;padding:80px 20px;border:1px dashed var(--line);border-radius:12px;
+  }
+  .empty-cart p{opacity:.6;margin:14px 0 26px;font-size:14px;}
+
+  /* summary card */
+  .summary{
+    background:var(--mint);border-radius:14px;padding:32px;position:sticky;top:96px;
+  }
+  .summary h2{font-family:'Fraunces',serif;font-weight:600;font-size:20px;color:var(--olive);margin-bottom:22px;}
+  .summary-row{
+    display:flex;justify-content:space-between;font-size:14px;padding:10px 0;
+  }
+  .summary-row.total{
+    border-top:1px solid var(--line);margin-top:8px;padding-top:18px;
+    font-weight:700;font-size:16px;color:var(--olive);
+  }
+  .summary-row span:last-child{font-weight:600;}
+  .promo{
+    display:flex;gap:8px;margin:20px 0;
+  }
+  .promo input{
+    flex:1;padding:12px 14px;border-radius:100px;border:1px solid var(--line);
+    background:var(--off);font-size:13px;font-family:inherit;color:var(--ink);
+  }
+  .promo input:focus{outline:none;border-color:var(--olive);}
+  .promo button{
+    background:var(--off);border:1px solid var(--line);border-radius:100px;padding:0 18px;
+    font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--olive);
+  }
+  .promo button:hover{background:var(--olive);color:var(--off);}
+  .summary-cta{margin-top:22px;}
+  .secure-note{
+    display:flex;align-items:center;gap:8px;justify-content:center;
+    font-size:11px;opacity:.55;margin-top:16px;letter-spacing:.02em;
+  }
+
+  /* ---------- CHECKOUT / BILLING ---------- */
+  .checkout-wrap{
+    display:none;grid-template-columns:1.6fr 1fr;gap:60px;
+    padding:40px 5vw 120px;align-items:start;
+  }
+  .billing-form{display:flex;flex-direction:column;gap:26px;}
+  .form-section{border-bottom:1px solid var(--line);padding-bottom:26px;}
+  .form-section:last-child{border-bottom:none;}
+  .form-section h3{
+    font-family:'Fraunces',serif;font-weight:600;font-size:17px;color:var(--olive);margin-bottom:16px;
+    display:flex;align-items:center;gap:10px;
+  }
+  .form-section h3 .n{
+    width:24px;height:24px;border-radius:50%;background:var(--olive);color:var(--off);
+    display:flex;align-items:center;justify-content:center;font-size:12px;font-family:'Fraunces',serif;
+  }
+  .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+  .form-grid .full{grid-column:1/-1;}
+  .field label{
+    display:block;font-size:11px;letter-spacing:.05em;text-transform:uppercase;font-weight:700;
+    opacity:.6;margin-bottom:7px;
+  }
+  .field input, .field select{
+    width:100%;padding:13px 14px;border-radius:8px;border:1px solid var(--line);
+    background:var(--off);font-size:14px;font-family:inherit;color:var(--ink);
+  }
+  .field input:focus, .field select:focus{outline:none;border-color:var(--olive);}
+  .pay-methods{display:flex;gap:10px;margin-bottom:16px;}
+  .pay-methods button{
+    flex:1;padding:12px;border-radius:8px;border:1px solid var(--line);background:var(--off);
+    font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--olive);opacity:.55;
+  }
+  .pay-methods button.active{opacity:1;border-color:var(--olive);background:var(--mint);}
+  .back-link{
+    display:inline-flex;align-items:center;gap:8px;font-size:12px;font-weight:700;
+    text-transform:uppercase;letter-spacing:.05em;opacity:.6;margin-bottom:28px;
+  }
+  .back-link:hover{opacity:1;}
+  .mini-items{margin-bottom:18px;}
+  .mini-item{display:flex;justify-content:space-between;font-size:13px;padding:8px 0;opacity:.85;}
+  .mini-item span:first-child{max-width:70%;}
+
+  /* ---------- CONFIRMATION ---------- */
+  .confirm-wrap{
+    display:none;padding:100px 5vw 140px;text-align:center;
+  }
+  .confirm-wrap .icon{
+    width:64px;height:64px;border-radius:50%;background:var(--olive);color:var(--off);
+    display:flex;align-items:center;justify-content:center;margin:0 auto 26px;
+  }
+  .confirm-wrap h1{font-size:clamp(28px,4vw,42px);color:var(--olive);margin-bottom:14px;}
+  .confirm-wrap p{opacity:.65;max-width:44ch;margin:0 auto 8px;line-height:1.6;font-size:14px;}
+  .order-id{
+    font-family:'Fraunces',serif;font-weight:600;color:var(--clay);font-size:18px;margin:18px 0 32px;
+  }
+
+  /* ---------- FOOTER ---------- */
+  footer{background:var(--olive);color:var(--off);padding:70px 5vw 26px;}
+  .foot-top{
+    display:flex;justify-content:space-between;align-items:center;
+    padding-bottom:40px;border-bottom:1px solid rgba(247,246,238,0.18);
+    flex-wrap:wrap;gap:24px;
+  }
+  .foot-top .wordmark{font-size:28px;}
+  .foot-links{display:flex;gap:30px;font-size:13px;text-transform:uppercase;letter-spacing:.04em;font-weight:600;opacity:.85;}
+  .foot-bottom{
+    display:flex;justify-content:space-between;padding-top:22px;font-size:12px;opacity:.55;flex-wrap:wrap;gap:10px;
+  }
+
+  /* ---------- RESPONSIVE ---------- */
+  @media (max-width:900px){
+    nav.nav-links{display:none;}
+    .cart-wrap, .checkout-wrap{grid-template-columns:1fr;padding:30px 6vw 100px;}
+    .summary{position:static;}
+    .form-grid{grid-template-columns:1fr;}
+    .cart-item{grid-template-columns:80px 1fr;}
+    .item-controls{grid-column:1/-1;flex-direction:row;height:auto;align-items:center;justify-content:space-between;margin-top:12px;}
+  }
+</style>
+</head>
+<body>
+
+<header id="siteHeader">
+  <div class="nav-logo wordmark">VESTURA</div>
+  <nav class="nav-links">
+    <a href="index.html">Home</a>
+    <a href="about.html">About</a>
+    <a href="fit-profile.html">AI Stylist</a>
+    <a href="collection.html">Collection</a>
+    <a href="contact.html">Contact Us</a>
+  </nav>
+  <a href="cart.html" class="nav-cta">Cart <span class="count" id="navCount">4</span></a>
+</header>
+
+<!-- ================= CART VIEW ================= -->
+<section id="cartView">
+  <div class="page-head">
+    <div class="eyebrow">Order</div>
+    <h1 class="display">Your bag</h1>
+    <div class="steps">
+      <div class="step active"><b>1</b> Bag</div>
+      <div class="sep"></div>
+      <div class="step"><b>2</b> Billing</div>
+      <div class="sep"></div>
+      <div class="step"><b>3</b> Confirmed</div>
+    </div>
+  </div>
+
+  <div class="cart-wrap">
+    <div class="cart-items" id="cartItems"></div>
+
+    <div class="summary">
+      <h2>Order summary</h2>
+      <div class="summary-row"><span>Subtotal</span><span id="sumSubtotal">₹0</span></div>
+      <div class="summary-row"><span>Shipping</span><span id="sumShipping">₹0</span></div>
+      <div class="summary-row" id="promoRow" style="display:none;"><span>Promo (WELCOME10)</span><span id="sumPromo">−₹0</span></div>
+      <div class="summary-row total"><span>Total</span><span id="sumTotal">₹0</span></div>
+
+      <div class="promo">
+        <input type="text" id="promoInput" placeholder="Promo code">
+        <button id="promoBtn">Apply</button>
+      </div>
+
+      <button class="btn-primary summary-cta" id="checkoutBtn">
+        Proceed to Billing
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </button>
+      <div class="secure-note">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="10" width="16" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>
+        Secure checkout
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= CHECKOUT / BILLING VIEW ================= -->
+<section id="checkoutView">
+  <div class="page-head">
+    <a href="#" class="back-link" id="backToCart">← Back to bag</a>
+    <div class="eyebrow">Order</div>
+    <h1 class="display">Billing details</h1>
+    <div class="steps">
+      <div class="step"><b>1</b> Bag</div>
+      <div class="sep"></div>
+      <div class="step active"><b>2</b> Billing</div>
+      <div class="sep"></div>
+      <div class="step"><b>3</b> Confirmed</div>
+    </div>
+  </div>
+
+  <div class="checkout-wrap">
+    <form class="billing-form" id="billingForm">
+      <div class="form-section">
+        <h3><span class="n">1</span> Contact</h3>
+        <div class="form-grid">
+          <div class="field full"><label>Email</label><input type="email" required placeholder="you@example.com"></div>
+          <div class="field full"><label>Phone number</label><input type="tel" required placeholder="+91 98765 43210"></div>
+        </div>
+      </div>
+
+      <div class="form-section">
+        <h3><span class="n">2</span> Shipping address</h3>
+        <div class="form-grid">
+          <div class="field full"><label>Full name</label><input type="text" required placeholder="Full name"></div>
+          <div class="field full"><label>Address</label><input type="text" required placeholder="House no., street, area"></div>
+          <div class="field"><label>City</label><input type="text" required placeholder="City"></div>
+          <div class="field"><label>State</label><input type="text" required placeholder="State"></div>
+          <div class="field"><label>PIN code</label><input type="text" required placeholder="110001"></div>
+          <div class="field"><label>Country</label><input type="text" required value="India"></div>
+        </div>
+      </div>
+
+      <div class="form-section">
+        <h3><span class="n">3</span> Payment</h3>
+        <div class="pay-methods">
+          <button type="button" class="active" data-pay="card">Card</button>
+          <button type="button" data-pay="upi">UPI</button>
+          <button type="button" data-pay="cod">Cash on Delivery</button>
+        </div>
+        <div class="form-grid" id="payFields">
+          <div class="field full"><label>Card number</label><input type="text" placeholder="1234 5678 9012 3456"></div>
+          <div class="field"><label>Expiry</label><input type="text" placeholder="MM / YY"></div>
+          <div class="field"><label>CVV</label><input type="text" placeholder="•••"></div>
+        </div>
+      </div>
+
+      <button type="submit" class="btn-primary">
+        Place Order
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </button>
+    </form>
+
+    <div class="summary">
+      <h2>Order summary</h2>
+      <div class="mini-items" id="miniItems"></div>
+      <div class="summary-row"><span>Subtotal</span><span id="cSubtotal">₹0</span></div>
+      <div class="summary-row"><span>Shipping</span><span id="cShipping">₹0</span></div>
+      <div class="summary-row" id="cPromoRow" style="display:none;"><span>Promo</span><span id="cPromo">−₹0</span></div>
+      <div class="summary-row total"><span>Total</span><span id="cTotal">₹0</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= CONFIRMATION VIEW ================= -->
+<section class="confirm-wrap" id="confirmView">
+  <div class="icon">
+    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
+  </div>
+  <h1 class="display">Order placed.</h1>
+  <p>Thanks for shopping with Vestura. A confirmation has been sent to your email, and your pieces are being packed in compostable wrap.</p>
+  <div class="order-id" id="orderId">VST-000000</div>
+  <a href="index.html" class="btn-ghost">Continue shopping</a>
+</section>
+
+<footer>
+  <div class="foot-top">
+    <div class="wordmark">VESTURA</div>
+    <div class="foot-links">
+      <a href="index.html#best">Collection</a>
+      <a href="fit-profile.html">Fit Profile</a>
+      <a href="about.html">About</a>
+    </div>
+  </div>
+  <div class="foot-bottom">
+    <span>© 2024–2026 Vestura. All rights reserved.</span>
+    <span>@vestura · vestura.com</span>
+  </div>
+</footer>
+
+<script>
+  // ---------- cart data ----------
+  let cart = [
+    { id:1, name:'Collegiate Rugby Shirt', label:'Outerwear', variant:'Size M · Forest', price:3200, qty:1, img:'images/street-group.jpg' },
+    { id:2, name:'Washed Six-Panel Cap', label:'Headwear', variant:'One size · Clay', price:1400, qty:1, img:'images/caps-stack.jpg' },
+    { id:3, name:'Raw Canvas Tote', label:'Accessories', variant:'One size · Natural', price:1650, qty:1, img:'images/tote-bags.jpg' },
+    { id:4, name:'Varsity Crewneck', label:'Fleece', variant:'Size L · Olive', price:2850, qty:1, img:'images/folded-tee.jpg' },
+  ];
+
+  const SHIPPING_FLAT = 150;
+  const FREE_SHIP_THRESHOLD = 5000;
+  let promoApplied = false;
+  const PROMO_CODE = 'WELCOME10';
+  const PROMO_RATE = 0.10;
+
+  const fmt = n => '₹' + Math.round(n).toLocaleString('en-IN');
+
+  function calcTotals(){
+    const subtotal = cart.reduce((s,i)=> s + i.price*i.qty, 0);
+    const shipping = cart.length===0 ? 0 : (subtotal >= FREE_SHIP_THRESHOLD ? 0 : SHIPPING_FLAT);
+    const promo = promoApplied ? subtotal * PROMO_RATE : 0;
+    const total = Math.max(subtotal + shipping - promo, 0);
+    return { subtotal, shipping, promo, total };
+  }
+
+  function renderCart(){
+    const wrap = document.getElementById('cartItems');
+    document.getElementById('navCount').textContent = cart.reduce((s,i)=>s+i.qty,0);
+
+    if(cart.length === 0){
+      wrap.innerHTML = `
+        <div class="empty-cart">
+          <div class="eyebrow" style="justify-content:center;">Bag</div>
+          <h2 class="display" style="margin-top:14px;font-size:28px;color:var(--olive);">Your bag is empty.</h2>
+          <p>Pieces you add will show up here, ready for checkout.</p>
+          <a href="index.html" class="btn-ghost">Explore the collection</a>
+        </div>`;
+    } else {
+      wrap.innerHTML = cart.map(item => `
+        <div class="cart-item" data-id="${item.id}">
+          <div class="media"><img src="${item.img}" alt="${item.name}"></div>
+          <div class="item-info">
+            <div class="p-label">${item.label}</div>
+            <h3>${item.name}</h3>
+            <div class="variant">${item.variant}</div>
+            <button class="item-remove" data-action="remove">Remove</button>
+          </div>
+          <div class="item-controls">
+            <div class="item-price">${fmt(item.price*item.qty)}</div>
+            <div class="qty-stepper">
+              <button data-action="dec">−</button>
+              <span>${item.qty}</span>
+              <button data-action="inc">+</button>
+            </div>
+          </div>
+        </div>`).join('');
+    }
+    renderTotals();
+  }
+
+  function renderTotals(){
+    const {subtotal, shipping, promo, total} = calcTotals();
+    document.getElementById('sumSubtotal').textContent = fmt(subtotal);
+    document.getElementById('sumShipping').textContent = shipping===0 ? 'Free' : fmt(shipping);
+    document.getElementById('sumTotal').textContent = fmt(total);
+    document.getElementById('promoRow').style.display = promoApplied ? 'flex' : 'none';
+    if(promoApplied) document.getElementById('sumPromo').textContent = '−' + fmt(promo);
+
+    document.getElementById('cSubtotal').textContent = fmt(subtotal);
+    document.getElementById('cShipping').textContent = shipping===0 ? 'Free' : fmt(shipping);
+    document.getElementById('cTotal').textContent = fmt(total);
+    document.getElementById('cPromoRow').style.display = promoApplied ? 'flex' : 'none';
+    if(promoApplied) document.getElementById('cPromo').textContent = '−' + fmt(promo);
+
+    document.getElementById('miniItems').innerHTML = cart.map(i =>
+      `<div class="mini-item"><span>${i.name} × ${i.qty}</span><span>${fmt(i.price*i.qty)}</span></div>`
+    ).join('');
+
+    document.getElementById('checkoutBtn').disabled = cart.length === 0;
+  }
+
+  document.getElementById('cartItems').addEventListener('click', e => {
+    const btn = e.target.closest('button');
+    if(!btn) return;
+    const row = e.target.closest('.cart-item');
+    const id = Number(row.dataset.id);
+    const item = cart.find(i => i.id === id);
+    const action = btn.dataset.action;
+    if(action === 'inc') item.qty++;
+    if(action === 'dec') item.qty = Math.max(1, item.qty - 1);
+    if(action === 'remove') cart = cart.filter(i => i.id !== id);
+    renderCart();
+  });
+
+  document.getElementById('promoBtn').addEventListener('click', () => {
+    const val = document.getElementById('promoInput').value.trim().toUpperCase();
+    if(val === PROMO_CODE){
+      promoApplied = true;
+      renderTotals();
+    } else {
+      const input = document.getElementById('promoInput');
+      input.style.borderColor = 'var(--sale)';
+      input.placeholder = 'Invalid code';
+      setTimeout(()=>{ input.style.borderColor=''; input.placeholder='Promo code'; }, 1600);
+    }
+  });
+
+  // ---------- view switching ----------
+  const cartView = document.getElementById('cartView');
+  const checkoutView = document.getElementById('checkoutView');
+  const confirmView = document.getElementById('confirmView');
+
+  document.getElementById('checkoutBtn').addEventListener('click', () => {
+    if(cart.length === 0) return;
+    cartView.style.display = 'none';
+    checkoutView.style.display = 'block';
+    checkoutView.querySelector('.checkout-wrap').style.display = 'grid';
+    window.scrollTo({top:0, behavior:'smooth'});
+  });
+
+  document.getElementById('backToCart').addEventListener('click', (e) => {
+    e.preventDefault();
+    checkoutView.style.display = 'none';
+    cartView.style.display = 'block';
+    window.scrollTo({top:0, behavior:'smooth'});
+  });
+
+  // payment method toggle (visual only)
+  document.querySelectorAll('.pay-methods button').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.pay-methods button').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById('payFields').style.display = btn.dataset.pay === 'card' ? 'grid' : 'none';
+    });
+  });
+
+  // submit order
+  document.getElementById('billingForm').addEventListener('submit', (e) => {
+    e.preventDefault();
+    checkoutView.style.display = 'none';
+    confirmView.style.display = 'block';
+    document.getElementById('orderId').textContent = 'VST-' + Math.floor(100000 + Math.random()*900000);
+    window.scrollTo({top:0, behavior:'smooth'});
+  });
+
+  renderCart();
+</script>
+
+</body>
+</html>

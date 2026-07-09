@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>About — Vestura</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,500;9..144,600;9..144,700;9..144,900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --olive:#0d2d1e;
+    --olive-2:#153a27;
+    --mint:#e7efda;
+    --off:#f7f6ee;
+    --ink:#0d2d1e;
+    --clay:#a98f56;
+    --sale:#a5462f;
+    --line: rgba(13,45,30,0.14);
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--off);
+    color:var(--ink);
+    font-family:'Inter',sans-serif;
+    overflow-x:hidden;
+    -webkit-font-smoothing:antialiased;
+  }
+  img{display:block;max-width:100%;height:auto;}
+  a{color:inherit;text-decoration:none;}
+  button{font-family:inherit;cursor:pointer;}
+
+  .eyebrow{
+    font-size:11px;letter-spacing:0.2em;text-transform:uppercase;font-weight:700;
+    display:flex;align-items:center;gap:10px;color:var(--olive);
+  }
+  .eyebrow::before{content:'';width:16px;height:1px;background:currentColor;display:inline-block;}
+  .eyebrow.on-dark{color:var(--mint);}
+
+  .display{font-family:'Fraunces',serif;font-optical-sizing:auto;font-weight:600;letter-spacing:-0.01em;line-height:0.98;}
+  .wordmark{font-family:'Fraunces',serif;font-weight:900;letter-spacing:-0.02em;}
+
+  /* ---------- NAV ---------- */
+  header{
+    position:sticky;top:0;left:0;right:0;z-index:100;
+    background:var(--off);
+    border-bottom:1px solid var(--line);
+    display:flex;align-items:center;justify-content:space-between;
+    padding:20px 5vw;color:var(--olive);
+  }
+  .nav-logo{font-size:22px;}
+  nav.nav-links{display:flex;gap:34px;font-size:13px;letter-spacing:.03em;text-transform:uppercase;font-weight:600;}
+  nav.nav-links a{position:relative;opacity:.82;transition:opacity .2s;}
+  nav.nav-links a:hover, nav.nav-links a.active{opacity:1;}
+  nav.nav-links a.active::after{
+    content:'';position:absolute;left:0;bottom:-6px;height:2px;width:100%;background:var(--clay);
+  }
+  .nav-cta{
+    border:1px solid var(--olive);padding:9px 20px;border-radius:100px;
+    font-size:12px;letter-spacing:.06em;text-transform:uppercase;font-weight:700;
+    transition:background .2s ease,color .2s ease;
+  }
+  .nav-cta:hover{background:var(--olive);color:var(--off);}
+
+  /* ---------- PAGE HERO ---------- */
+  .page-hero{
+    position:relative;
+    min-height:74vh;
+    display:flex;align-items:flex-end;
+    background:var(--olive);
+    overflow:hidden;
+  }
+  .page-hero img{
+    position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 32%;
+    opacity:.75;
+  }
+  .page-hero-scrim{
+    position:absolute;inset:0;
+    background:linear-gradient(180deg, rgba(13,45,30,0.2) 0%, rgba(13,45,30,0.35) 45%, rgba(13,45,30,0.95) 100%);
+  }
+  .page-hero-content{
+    position:relative;z-index:2;color:var(--off);
+    padding:0 5vw 70px;
+  }
+  .page-hero-content .eyebrow{margin-bottom:22px;}
+  .page-hero-content h1{
+    font-size:clamp(38px,6vw,88px);
+    max-width:16ch;
+  }
+  .page-hero-content p{
+    margin-top:20px;font-size:16px;max-width:52ch;opacity:.82;line-height:1.7;
+  }
+
+  /* ---------- SECTION GENERIC ---------- */
+  section{padding:120px 5vw;position:relative;}
+  h2.section-title{
+    font-family:'Fraunces',serif;font-weight:600;
+    font-size:clamp(30px,4vw,52px);line-height:1.1;letter-spacing:-0.01em;color:var(--olive);
+  }
+  .lede{font-size:16px;line-height:1.75;max-width:48ch;opacity:.75;}
+
+  /* ---------- INTRO ---------- */
+  .intro{background:var(--off);text-align:center;}
+  .intro-inner{max-width:800px;margin:0 auto;}
+  .intro .eyebrow{justify-content:center;margin-bottom:26px;}
+  .intro h2{font-size:clamp(26px,3.6vw,44px);line-height:1.4;}
+  .intro h2 em{color:var(--clay);font-style:normal;}
+
+  /* ---------- PROBLEM / SOLUTION : SPLIT SCREEN ---------- */
+  .ps-wrap{background:var(--mint);padding-top:100px;padding-bottom:100px;}
+  .ps-head{text-align:center;max-width:640px;margin:0 auto 64px;}
+  .ps-head .eyebrow{justify-content:center;margin-bottom:22px;}
+
+  .ps-split{
+    position:relative;
+    border:1px solid var(--line);border-radius:16px;overflow:hidden;
+    background:var(--off);
+  }
+
+  /* column headers */
+  .ps-col-heads{
+    display:grid;grid-template-columns:1fr 1fr;
+  }
+  .ps-col-head{padding:36px 44px;}
+  .ps-col-head.problem{background:rgba(165,70,47,0.07);border-right:1px solid var(--line);}
+  .ps-col-head.solution{background:rgba(13,45,30,0.05);}
+  .ps-col-tag{
+    display:inline-flex;align-items:center;gap:8px;
+    font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;
+    padding:6px 14px;border-radius:100px;margin-bottom:16px;
+  }
+  .ps-col-tag.problem{background:rgba(165,70,47,0.14);color:var(--sale);}
+  .ps-col-tag.solution{background:rgba(13,45,30,0.12);color:var(--olive);}
+  .ps-col-head h3{
+    font-family:'Fraunces',serif;font-weight:600;font-size:clamp(20px,2.2vw,28px);color:var(--olive);line-height:1.25;
+  }
+
+  /* paired rows */
+  .ps-rows{position:relative;}
+  .ps-pair{
+    display:grid;grid-template-columns:1fr 56px 1fr;align-items:stretch;
+    border-top:1px solid var(--line);
+  }
+  .ps-cell{padding:30px 44px;font-size:14.5px;line-height:1.7;opacity:.85;display:flex;gap:14px;}
+  .ps-cell .mark{
+    flex:none;width:22px;height:22px;border-radius:50%;margin-top:1px;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .ps-cell.problem{border-right:1px solid var(--line);}
+  .ps-cell.problem .mark{background:rgba(165,70,47,0.14);color:var(--sale);}
+  .ps-cell.solution .mark{background:rgba(13,45,30,0.1);color:var(--olive);}
+  .ps-connector{
+    display:flex;align-items:center;justify-content:center;position:relative;background:var(--off);
+  }
+  .ps-connector .arrow{
+    width:34px;height:34px;border-radius:50%;background:var(--clay);color:var(--off);
+    display:flex;align-items:center;justify-content:center;flex:none;
+    box-shadow:0 0 0 6px var(--off);
+  }
+
+  /* mobile stack fallback */
+  .ps-pair-mobile-label{display:none;}
+
+  /* ---------- MISSION / VISION ---------- */
+  .mv{background:var(--olive);color:var(--off);}
+  .mv-grid{display:grid;grid-template-columns:1fr 1fr;gap:70px;}
+  .mv-card .eyebrow{color:var(--clay);margin-bottom:20px;}
+  .mv-card h3{
+    font-family:'Fraunces',serif;font-weight:600;font-size:clamp(24px,3vw,36px);line-height:1.25;
+  }
+  .mv-card p{margin-top:18px;font-size:15px;line-height:1.8;opacity:.78;max-width:46ch;}
+  .mv-divider{
+    grid-column:1 / -1;height:1px;background:rgba(247,246,238,0.16);margin:8px 0 8px;
+  }
+
+  /* ---------- VALUES STRIP ---------- */
+  .values{background:var(--off);}
+  .values-head{text-align:center;max-width:640px;margin:0 auto 60px;}
+  .values-head .eyebrow{justify-content:center;margin-bottom:22px;}
+  .values-grid{
+    display:grid;grid-template-columns:repeat(4,1fr);gap:24px;
+  }
+  .value-card{
+    border:1px solid var(--line);border-radius:10px;padding:30px 26px;background:var(--mint);
+  }
+  .value-card .num{font-family:'Fraunces',serif;font-size:26px;font-weight:600;color:var(--clay);}
+  .value-card h4{font-family:'Fraunces',serif;font-weight:600;font-size:18px;margin-top:14px;color:var(--olive);}
+  .value-card p{font-size:13px;margin-top:10px;line-height:1.6;opacity:.7;}
+
+  /* ---------- CLOSING CTA ---------- */
+  .closing{background:var(--mint);text-align:center;}
+  .closing h2{
+    font-family:'Fraunces',serif;font-weight:600;font-size:clamp(30px,4.6vw,58px);
+    max-width:16ch;margin:0 auto;color:var(--olive);
+  }
+  .closing p{margin:20px auto 0;max-width:46ch;opacity:.72;font-size:15px;line-height:1.7;}
+  .closing-ctas{display:flex;justify-content:center;gap:14px;margin-top:38px;flex-wrap:wrap;}
+  .btn-primary{
+    background:var(--olive);color:var(--off);padding:16px 32px;border-radius:100px;border:none;
+    font-size:13px;letter-spacing:.05em;text-transform:uppercase;font-weight:700;
+    transition:transform .2s ease, background .2s ease;
+  }
+  .btn-primary:hover{transform:translateY(-2px);background:var(--olive-2);}
+  .btn-secondary{
+    background:transparent;color:var(--olive);padding:16px 32px;border-radius:100px;border:1px solid var(--olive);
+    font-size:13px;letter-spacing:.05em;text-transform:uppercase;font-weight:700;
+    transition:background .2s ease,color .2s ease;
+  }
+  .btn-secondary:hover{background:var(--olive);color:var(--off);}
+
+  /* ---------- FOOTER ---------- */
+  footer{background:var(--olive);color:var(--off);padding:60px 5vw 26px;}
+  .foot-top{
+    display:flex;justify-content:space-between;align-items:center;
+    padding-bottom:36px;border-bottom:1px solid rgba(247,246,238,0.18);
+    flex-wrap:wrap;gap:20px;
+  }
+  .foot-top .wordmark{font-size:26px;}
+  .foot-links{display:flex;gap:28px;font-size:13px;text-transform:uppercase;letter-spacing:.04em;font-weight:600;opacity:.85;}
+  .foot-bottom{
+    display:flex;justify-content:space-between;padding-top:20px;font-size:12px;opacity:.55;flex-wrap:wrap;gap:10px;
+  }
+
+  /* ---------- RESPONSIVE ---------- */
+  @media (max-width:900px){
+    nav.nav-links{display:none;}
+    .mv-grid{grid-template-columns:1fr;gap:40px;}
+    .values-grid{grid-template-columns:repeat(2,1fr);}
+    section{padding:80px 6vw;}
+
+    .ps-col-heads{grid-template-columns:1fr;}
+    .ps-col-head.problem{border-right:none;border-bottom:1px solid var(--line);}
+
+    .ps-pair{grid-template-columns:1fr;}
+    .ps-cell.problem{border-right:none;border-bottom:1px dashed var(--line);}
+    .ps-connector{padding:10px 44px;justify-content:flex-start;background:none;}
+    .ps-connector .arrow{transform:rotate(90deg);box-shadow:none;width:28px;height:28px;}
+  }
+  @media (max-width:560px){
+    .values-grid{grid-template-columns:1fr;}
+    .closing-ctas{flex-direction:column;}
+    .btn-primary,.btn-secondary{width:100%;text-align:center;}
+    .ps-col-head, .ps-cell{padding:26px 26px;}
+  }
+  @media (prefers-reduced-motion:reduce){*{animation:none !important;transition:none !important;}}
+</style>
+</head>
+<body>
+
+<header id="siteHeader">
+  <div class="nav-logo wordmark">VESTURA</div>
+  <nav class="nav-links">
+    <a href="index.html">Home</a>    
+    <a href="about.html" class="active">About</a>
+    <a href="fit-profile.html">AI Stylist</a>
+    <a href="collection.html">Collection</a>
+    <a href="contact.html">Contact Us</a>
+  </nav>
+  <a href="fit-profile.html" class="nav-cta">Cart</a>
+</header>
+
+<section class="page-hero">
+  <img src="images/campaign-field.jpg" alt="Vestura campaign">
+  <div class="page-hero-scrim"></div>
+  <div class="page-hero-content">
+    <div class="eyebrow on-dark">About Vestura</div>
+    <h1 class="display">Clothes that fit the second time, on the first try.</h1>
+    <p>We started Vestura in 2024 because getting dressed online had become a guessing game — one we were tired of losing. This is what we're building instead.</p>
+  </div>
+</section>
+
+<section class="intro">
+  <div class="intro-inner">
+    <div class="eyebrow">What we're about</div>
+    <h2>Vestura is a wardrobe brand built around <em>certainty</em> — rugby knits, washed caps and raw canvas staples, cut consistently across every drop and shipped in packaging designed to disappear back into the ground, not a landfill.</h2>
+  </div>
+</section>
+
+<section class="ps-wrap">
+  <div class="ps-head">
+    <div class="eyebrow">Side by side</div>
+    <h2 class="section-title">What we found, and what we did about it.</h2>
+  </div>
+
+  <div class="ps-split">
+
+    <div class="ps-col-heads">
+      <div class="ps-col-head problem">
+        <span class="ps-col-tag problem">The problem</span>
+        <h3>Online shopping made fit a lottery.</h3>
+      </div>
+      <div class="ps-col-head solution">
+        <span class="ps-col-tag solution">Our solution</span>
+        <h3>Try it on before you even try it on.</h3>
+      </div>
+    </div>
+
+    <div class="ps-rows">
+
+      <div class="ps-pair">
+        <div class="ps-cell problem">
+          <span class="mark"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 18L18 6M6 6l12 12"/></svg></span>
+          <span>Inconsistent sizing between brands, and often between drops from the same brand.</span>
+        </div>
+        <div class="ps-connector"><span class="arrow"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></div>
+        <div class="ps-cell solution">
+          <span class="mark"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg></span>
+          <span>A five-minute Fit Profile that recommends your size before checkout, not after.</span>
+        </div>
+      </div>
+
+      <div class="ps-pair">
+        <div class="ps-cell problem">
+          <span class="mark"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 18L18 6M6 6l12 12"/></svg></span>
+          <span>Return shipping and repackaging that quietly outweighs the item's own footprint.</span>
+        </div>
+        <div class="ps-connector"><span class="arrow"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></div>
+        <div class="ps-cell solution">
+          <span class="mark"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg></span>
+          <span>Consistent, generously-cut blocks across every colourway and every season.</span>
+        </div>
+      </div>
+
+      <div class="ps-pair">
+        <div class="ps-cell problem">
+          <span class="mark"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 18L18 6M6 6l12 12"/></svg></span>
+          <span>Plastic mailers and poly bags that outlive the garment they carried.</span>
+        </div>
+        <div class="ps-connector"><span class="arrow"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></div>
+        <div class="ps-cell solution">
+          <span class="mark"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg></span>
+          <span>Seed-lined paper tins that replace the plastic mailer, and grow into a plant pot after.</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section class="mv">
+  <div class="mv-grid">
+    <div class="mv-card">
+      <div class="eyebrow">Our mission</div>
+      <h3>To make getting dressed feel certain again.</h3>
+      <p>We exist to close the gap between what you order and what actually shows up — building garments and a fit system precise enough that "try it on" stops being a leap of faith.</p>
+    </div>
+    <div class="mv-card">
+      <div class="eyebrow">Our vision</div>
+      <h3>A wardrobe industry with nothing wasted, on either end.</h3>
+      <p>Nothing ships that isn't going to be kept and worn, and nothing we send out fails to go back into the ground when its life is done. Fit built in from the start; decay built in from the start.</p>
+    </div>
+  </div>
+</section>
+
+<section class="values">
+  <div class="values-head">
+    <div class="eyebrow">How we work</div>
+    <h2 class="section-title">Four things we don't compromise on.</h2>
+  </div>
+  <div class="values-grid">
+    <div class="value-card">
+      <div class="num">01</div>
+      <h4>Fit first</h4>
+      <p>Every pattern starts from a Fit Profile, not a sample size on a runway model.</p>
+    </div>
+    <div class="value-card">
+      <div class="num">02</div>
+      <h4>Built to last</h4>
+      <p>Heavyweight cotton, reinforced seams, colours that fade the way denim does — on purpose.</p>
+    </div>
+    <div class="value-card">
+      <div class="num">03</div>
+      <h4>Nothing single-use</h4>
+      <p>Tins you plant, tags cut from recycled board, totes meant to replace the bag it came in.</p>
+    </div>
+    <div class="value-card">
+      <div class="num">04</div>
+      <h4>Small, deliberate drops</h4>
+      <p>We'd rather sell out of the right sizes than over-produce the wrong ones.</p>
+    </div>
+  </div>
+</section>
+
+<section class="closing">
+  <div class="eyebrow" style="justify-content:center;">Start here</div>
+  <h2>Build your Fit Profile once. Wear it right, every drop after.</h2>
+  <p>Five minutes now saves a return later — and gets you first access to restocks in your size.</p>
+  <div class="closing-ctas">
+    <a href="fit-profile.html" class="btn-primary">Create Your Fit Profile</a>
+    <a href="index.html#best" class="btn-secondary">Shop the Collection</a>
+  </div>
+</section>
+
+<footer>
+  <div class="foot-top">
+    <div class="wordmark">VESTURA</div>
+    <div class="foot-links">
+      <a href="index.html#best">Collection</a>
+      <a href="fit-profile.html">Fit Profile</a>
+      <a href="about.html">About</a>
+    </div>
+  </div>
+  <div class="foot-bottom">
+    <span>© 2024–2026 Vestura. All rights reserved.</span>
+    <span>@vestura · vestura.com</span>
+  </div>
+</footer>
+
+</body>
+</html>

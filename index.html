@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vestura — Try It On Before You Even Try It On</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,500;9..144,600;9..144,700;9..144,900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --olive:#0d2d1e;
+    --olive-2:#153a27;
+    --mint:#e7efda;
+    --off:#f7f6ee;
+    --ink:#0d2d1e;
+    --clay:#a98f56;
+    --sale:#a5462f;
+    --line: rgba(13,45,30,0.14);
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--off);
+    color:var(--ink);
+    font-family:'Inter',sans-serif;
+    overflow-x:hidden;
+    -webkit-font-smoothing:antialiased;
+  }
+  img{display:block;max-width:100%;height:auto;}
+  a{color:inherit;text-decoration:none;}
+  button{font-family:inherit;cursor:pointer;}
+
+  .eyebrow{
+    font-size:11px;letter-spacing:0.2em;text-transform:uppercase;font-weight:700;
+    display:flex;align-items:center;gap:10px;color:var(--olive);
+  }
+  .eyebrow::before{content:'';width:16px;height:1px;background:currentColor;display:inline-block;}
+
+  .display{font-family:'Fraunces',serif;font-optical-sizing:auto;font-weight:600;letter-spacing:-0.01em;line-height:0.98;}
+  .wordmark{font-family:'Fraunces',serif;font-weight:900;letter-spacing:-0.02em;}
+
+  /* ---------- NAV ---------- */
+  header{
+    position:fixed;top:0;left:0;right:0;z-index:100;
+    display:flex;align-items:center;justify-content:space-between;
+    padding:26px 5vw;color:var(--off);
+    transition:background .35s ease, padding .35s ease, color .35s ease;
+  }
+  header.scrolled{background:var(--off);color:var(--olive);padding:16px 5vw;box-shadow:0 1px 0 var(--line);}
+  .nav-logo{font-size:22px;}
+  nav.nav-links{display:flex;gap:34px;font-size:13px;letter-spacing:.03em;text-transform:uppercase;font-weight:600;}
+  nav.nav-links a{position:relative;opacity:.85;transition:opacity .2s;}
+  nav.nav-links a:hover{opacity:1;}
+  .nav-cta{
+    border:1px solid currentColor;padding:9px 20px;border-radius:100px;
+    font-size:12px;letter-spacing:.06em;text-transform:uppercase;font-weight:700;
+    transition:background .2s ease,color .2s ease;
+  }
+  header:not(.scrolled) .nav-cta:hover{background:var(--off);color:var(--olive);}
+  header.scrolled .nav-cta:hover{background:var(--olive);color:var(--off);}
+
+  /* ---------- HERO ---------- */
+  .hero{
+    position:relative;
+    height:100vh;
+    display:flex;
+    flex-direction:column;
+    justify-content:flex-end;
+    overflow:hidden;
+    background:var(--olive);
+  }
+  .hero img.hero-bg{
+    position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 30%;
+  }
+  .hero-scrim{
+    position:absolute;inset:0;
+    background:linear-gradient(180deg, rgba(13,45,30,0.15) 0%, rgba(13,45,30,0.1) 38%, rgba(13,45,30,0.88) 100%);
+  }
+  .hero-headline{
+    position:relative;z-index:2;color:var(--off);
+    padding:0 5vw 40px;
+  }
+  .hero-headline .eyebrow{color:var(--off);opacity:.85;margin-bottom:20px;}
+  .hero-headline h1{
+    font-size:clamp(40px, 6vw, 84px);
+    max-width:14ch;
+  }
+  .hero-headline p{
+    margin-top:16px;font-size:16px;max-width:42ch;opacity:.85;line-height:1.6;
+  }
+
+  .hero-ctas{
+    position:relative;z-index:2;
+    display:flex;gap:14px;flex-wrap:wrap;
+    padding:0 5vw 56px;
+  }
+  .btn-primary{
+    background:var(--off);color:var(--olive);
+    padding:17px 32px;border-radius:100px;border:none;
+    font-size:13px;letter-spacing:.05em;text-transform:uppercase;font-weight:700;
+    display:inline-flex;align-items:center;gap:10px;
+    transition:transform .2s ease, background .2s ease;
+  }
+  .btn-primary:hover{transform:translateY(-2px);background:var(--mint);}
+  .btn-primary svg{width:16px;height:16px;}
+  .btn-secondary{
+    background:transparent;color:var(--off);
+    padding:17px 32px;border-radius:100px;border:1px solid var(--off);
+    font-size:13px;letter-spacing:.05em;text-transform:uppercase;font-weight:700;
+    transition:background .2s ease,color .2s ease;
+  }
+  .btn-secondary:hover{background:var(--off);color:var(--olive);}
+
+  /* ---------- ABOUT / BRAND BLURB ---------- */
+  .about{
+    background:var(--off);
+    padding:120px 5vw;
+    text-align:center;
+  }
+  .about-inner{max-width:760px;margin:0 auto;}
+  .about .eyebrow{justify-content:center;margin-bottom:26px;}
+  .about h2{
+    font-family:'Fraunces',serif;font-weight:600;
+    font-size:clamp(26px,3.4vw,42px);
+    line-height:1.35;color:var(--olive);
+  }
+  .about h2 em{color:var(--clay);font-style:normal;}
+  .about-meta{
+    display:flex;justify-content:center;gap:50px;margin-top:48px;flex-wrap:wrap;
+  }
+  .about-meta .stat b{
+    font-family:'Fraunces',serif;font-size:30px;font-weight:600;display:block;color:var(--olive);
+  }
+  .about-meta .stat span{font-size:11px;letter-spacing:.08em;text-transform:uppercase;opacity:.55;}
+
+  /* ---------- BEST COLLECTION ---------- */
+  .best{background:var(--mint);padding:120px 5vw;}
+  .best-head{
+    display:flex;justify-content:space-between;align-items:flex-end;
+    margin-bottom:54px;gap:20px;flex-wrap:wrap;
+  }
+  .best-head h2{
+    font-family:'Fraunces',serif;font-weight:600;color:var(--olive);
+    font-size:clamp(30px,4vw,50px);line-height:1.05;
+  }
+  .best-head p{font-size:15px;max-width:40ch;opacity:.7;line-height:1.6;}
+  .view-all{
+    font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
+    display:inline-flex;align-items:center;gap:8px;color:var(--olive);
+    border-bottom:1px solid var(--olive);padding-bottom:4px;
+  }
+
+  .product-grid{
+    display:grid;grid-template-columns:repeat(4,1fr);gap:26px 24px;
+  }
+  .product-card{position:relative;}
+  .product-media{
+    position:relative;border-radius:10px;overflow:hidden;background:var(--off);aspect-ratio:4/5;
+  }
+  .product-media img{width:100%;height:100%;object-fit:cover;transition:transform .5s ease;}
+  .product-card:hover .product-media img{transform:scale(1.06);}
+  .rank-badge{
+    position:absolute;top:12px;left:12px;
+    background:var(--olive);color:var(--mint);
+    font-family:'Fraunces',serif;font-weight:700;font-size:13px;
+    width:30px;height:30px;border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .quick-add{
+    position:absolute;left:10px;right:10px;bottom:10px;
+    background:var(--off);color:var(--olive);border:none;border-radius:8px;
+    padding:11px 0;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
+    opacity:0;transform:translateY(8px);
+    transition:opacity .22s ease, transform .22s ease, background .2s;
+  }
+  .product-card:hover .quick-add{opacity:1;transform:translateY(0);}
+  .quick-add:hover{background:var(--olive);color:var(--off);}
+  .product-info{padding-top:14px;}
+  .product-info .p-label{font-size:11px;letter-spacing:.06em;text-transform:uppercase;opacity:.5;margin-bottom:4px;}
+  .product-info h3{font-family:'Fraunces',serif;font-weight:600;font-size:16px;color:var(--olive);}
+  .product-price{margin-top:6px;font-size:14px;font-weight:700;}
+
+  /* ---------- FOOTER ---------- */
+  footer{background:var(--olive);color:var(--off);padding:70px 5vw 26px;}
+  .foot-top{
+    display:flex;justify-content:space-between;align-items:center;
+    padding-bottom:40px;border-bottom:1px solid rgba(247,246,238,0.18);
+    flex-wrap:wrap;gap:24px;
+  }
+  .foot-top .wordmark{font-size:28px;}
+  .foot-links{display:flex;gap:30px;font-size:13px;text-transform:uppercase;letter-spacing:.04em;font-weight:600;opacity:.85;}
+  .foot-bottom{
+    display:flex;justify-content:space-between;padding-top:22px;font-size:12px;opacity:.55;flex-wrap:wrap;gap:10px;
+  }
+
+  /* ---------- RESPONSIVE ---------- */
+  @media (max-width:900px){
+    nav.nav-links{display:none;}
+    .product-grid{grid-template-columns:repeat(2,1fr);}
+    .about{padding:90px 6vw;}
+    .best{padding:90px 6vw;}
+  }
+  @media (max-width:560px){
+    .hero-ctas{flex-direction:column;}
+    .btn-primary, .btn-secondary{width:100%;justify-content:center;text-align:center;}
+    .about-meta{gap:30px;}
+    .product-grid{grid-template-columns:1fr 1fr;gap:16px;}
+    .foot-links{gap:18px;flex-wrap:wrap;}
+  }
+  @media (prefers-reduced-motion:reduce){*{animation:none !important;transition:none !important;}}
+</style>
+</head>
+<body>
+
+<header id="siteHeader">
+  <div class="nav-logo wordmark">VESTURA</div>
+  <nav class="nav-links">
+    <a href="index.html">Home</a>    
+    <a href="about.html">About</a>
+    <a href="fit-profile.html">AI Stylist</a>
+    <a href="collection.html">Collection</a>
+    <a href="contact.html">Contact Us</a>
+  </nav>
+  <a href="fit-profile.html" class="nav-cta">Cart</a>
+</header>
+
+<section class="hero">
+  <img class="hero-bg" src="images/campaign-field.jpg" alt="Vestura SS24 campaign">
+  <div class="hero-scrim"></div>
+  <div class="hero-headline">
+    <div class="eyebrow">SS / 24 — Established 2024</div>
+    <h1 class="display">Try it on before you even try it on.</h1>
+    <p>Elevated wardrobe staples cut for movement — rugby knits, washed caps and raw canvas totes, made to outlast the season.</p>
+  </div>
+  <div class="hero-ctas">
+    <a href="fit-profile.html" class="btn-primary">
+      Create Your Fit Profile
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+    </a>
+    <a href="#best" class="btn-secondary">Explore Collection</a>
+  </div>
+</section>
+
+<section class="about" id="about">
+  <div class="about-inner">
+    <div class="eyebrow">What we're about</div>
+    <h2>Vestura makes wardrobe staples for people who'd rather move than pose — rugby knits, raw canvas and washed cotton, patterned around real bodies and shipped in packaging that <em>grows into a plant</em> once you're done with the box.</h2>
+    <div class="about-meta">
+      <div class="stat"><b>2024</b><span>Founded</span></div>
+      <div class="stat"><b>100%</b><span>Compostable packaging</span></div>
+      <div class="stat"><b>04</b><span>Core colourways</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="best" id="best">
+  <div class="best-head">
+    <div>
+      <div class="eyebrow">Fan favourites</div>
+      <h2>Best of the collection</h2>
+    </div>
+    <p>The four pieces our fit-profile members reorder most, restocked in the colourways that sold out first.</p>
+    <a href="#" class="view-all">View all
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+    </a>
+  </div>
+  <div class="product-grid">
+
+    <div class="product-card">
+      <div class="product-media">
+        <span class="rank-badge">01</span>
+        <img src="images/street-group.jpg" alt="Collegiate Rugby Shirt">
+        <button class="quick-add">+ Quick add</button>
+      </div>
+      <div class="product-info">
+        <div class="p-label">Outerwear</div>
+        <h3>Collegiate Rugby Shirt</h3>
+        <div class="product-price">₹3,200</div>
+      </div>
+    </div>
+
+    <div class="product-card">
+      <div class="product-media">
+        <span class="rank-badge">02</span>
+        <img src="images/caps-stack.jpg" alt="Washed Six-Panel Cap">
+        <button class="quick-add">+ Quick add</button>
+      </div>
+      <div class="product-info">
+        <div class="p-label">Headwear</div>
+        <h3>Washed Six-Panel Cap</h3>
+        <div class="product-price">₹1,400</div>
+      </div>
+    </div>
+
+    <div class="product-card">
+      <div class="product-media">
+        <span class="rank-badge">03</span>
+        <img src="images/tote-bags.jpg" alt="Raw Canvas Tote">
+        <button class="quick-add">+ Quick add</button>
+      </div>
+      <div class="product-info">
+        <div class="p-label">Accessories</div>
+        <h3>Raw Canvas Tote</h3>
+        <div class="product-price">₹1,650</div>
+      </div>
+    </div>
+
+    <div class="product-card">
+      <div class="product-media">
+        <span class="rank-badge">04</span>
+        <img src="images/folded-tee.jpg" alt="Varsity Crewneck">
+        <button class="quick-add">+ Quick add</button>
+      </div>
+      <div class="product-info">
+        <div class="p-label">Fleece</div>
+        <h3>Varsity Crewneck</h3>
+        <div class="product-price">₹2,850</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<footer>
+  <div class="foot-top">
+    <div class="wordmark">VESTURA</div>
+    <div class="foot-links">
+      <a href="#best">Collection</a>
+      <a href="fit-profile.html">Fit Profile</a>
+      <a href="about.html">About</a>
+    </div>
+  </div>
+  <div class="foot-bottom">
+    <span>© 2024–2026 Vestura. All rights reserved.</span>
+    <span>@vestura · vestura.com</span>
+  </div>
+</footer>
+
+<script>
+  const header = document.getElementById('siteHeader');
+  window.addEventListener('scroll', () => {
+    header.classList.toggle('scrolled', window.scrollY > 40);
+  });
+</script>
+
+</body>
+</html>
