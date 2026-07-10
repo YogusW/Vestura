@@ -58,6 +58,16 @@
   }
   header:not(.scrolled) .nav-cta:hover{background:var(--off);color:var(--olive);}
   header.scrolled .nav-cta:hover{background:var(--olive);color:var(--off);}
+  .nav-actions{display:flex;align-items:center;gap:14px;}
+  .nav-search{
+    width:38px;height:38px;border-radius:50%;
+    border:1px solid currentColor;background:transparent;color:inherit;
+    display:flex;align-items:center;justify-content:center;
+    transition:background .2s ease,color .2s ease;
+  }
+  .nav-search svg{width:16px;height:16px;}
+  header:not(.scrolled) .nav-search:hover{background:var(--off);color:var(--olive);}
+  header.scrolled .nav-search:hover{background:var(--olive);color:var(--off);}
 
   /* ---------- HERO ---------- */
   .hero{
@@ -70,7 +80,7 @@
     background:var(--olive);
   }
   .hero img.hero-bg{
-    position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 30%;
+    position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 40%;
   }
   .hero-scrim{
     position:absolute;inset:0;
@@ -221,11 +231,16 @@
     <a href="collection.html">Collection</a>
     <a href="contact.html">Contact Us</a>
   </nav>
-  <a href="cart.html" class="nav-cta">Cart</a>
+  <div class="nav-actions">
+    <button class="nav-search" type="button" aria-label="Search">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+    </button>
+    <a href="cart.html" class="nav-cta">Cart</a>
+  </div>
 </header>
 
 <section class="hero">
-  <img class="hero-bg" src="images/campaign-field.jpg" alt="Vestura SS24 campaign">
+  <img class="hero-bg" src="./assets/images/01111111.jpg.jpeg" alt="Vestura SS24 campaign — three models in a golden wheat field">
   <div class="hero-scrim"></div>
   <div class="hero-headline">
     <div class="eyebrow">SS / 24 — Established 2024</div>
